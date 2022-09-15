@@ -1,0 +1,85 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cppbuild",
+            "label": "cppbuild",
+            "command": "/usr/bin/clang++",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${file}",
+                "-I",
+                "/usr/local/Cellar/halide/13.0.3/include",
+                "-I",
+                "/usr/local/Cellar/halide/13.0.3/share/tools",
+                "-L",
+                "/usr/local/Cellar/halide/13.0.3/lib",
+                "-lHalide",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}",
+                "-std=c++17"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "presentation": {
+                //shell命令输出的内容并不弹出来提醒
+                "reveal": "silent",
+                "close": true
+            }
+
+        },
+        {
+            "label": "runxxx",
+            "type": "shell",
+            "command": "${fileDirname}/${fileBasenameNoExtension}",
+            //依赖build task(刚刚创建的那个)，执行该task之前先执行build
+            "dependsOn": [
+                "cppbuild"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                //自动聚焦
+                "focus": true,
+                //共享控制台，利用之前的控制台，并不重新创建
+                "panel": "shared",
+                "showReuseMessage": true,
+                //启动之前清理控制台输出
+                "clear": true
+            }
+        },
+        {
+            "label": "Build_run",
+            "dependsOn": ["cppbuild","runxxx",]
+        }
+    ]
+}
+
+// {
+//     "tasks": [
+    // {
+    //     "label": "Client Build",
+    //     "command": "gulp",
+    //     "args": ["build"],
+    //     "options": {
+    //       "cwd": "${workspaceFolder}/client"
+    //     }
+    //   },
+    //   {
+    //     "label": "Server Build",
+    //     "command": "gulp",
+    //     "args": ["build"],
+    //     "options": {
+    //       "cwd": "${workspaceFolder}/server"
+    //     }
+    //   },
+    //   {
+    //     "label": "Build",
+    //     "dependsOn": ["Client Build", "Server Build"]
+    //   }
+    // ]
