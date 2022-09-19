@@ -1,0 +1,8 @@
+mbSize = 120
+matchThresh = 100 #* you can modify this
+
+if imageMode == "real":
+    refPath = "../Utility/fast-openISP/output/test1.png"
+    curPath = "../Utility/fast-openISP/output/test2.png"
+    # currentImg,referenceImg = getRealImage(refPath,curPath,cutting=True)
+    previousImg,referenceImg = getRealImage(refPath,curPath,cutting=False)

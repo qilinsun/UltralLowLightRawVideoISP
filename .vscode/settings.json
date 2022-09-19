@@ -1,8 +1,0 @@
-{
-    "cmake.useCMakePresets": false,
-    "files.associations": {
-        "streambuf": "cpp",
-        "*.tcc": "cpp",
-        "fstream": "cpp"
-    }
-}

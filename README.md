@@ -1,13 +1,22 @@
-# RAW2VideoUnderLowLight
-A fast and flexiable ISP for Realtime Low light Video from RAW data
+# LowLightR2V
 
-## Goal : Real-Time Low-Light Raw_sequence to Video
+## Project pipeline
+![](Docs/Images/project_pipeline.png)
+<hr/>
 
+Merging
+![](Docs/Images/project_pipeline2.png)
 
-### Todo List
- - [ ] [OpenISP](https://github.com/cruxopen/openISP) using pytorch (2 Week reimplementation) 
+### Todo
+ - [x] FIFO bucket
+ - [x] Alignment
+ - [x] Merging 
+ - [x] ISP comparison ([pytorch accelarate HDR+ rawpy](https://github.com/martin-marek/hdr-plus-pytorch) v.s. [HDR+ halide ISP](https://github.com/792x/HDR-Plus-Python) v.s. fastOpenISP)
+ - [x] RGB-NIR interpolation
+ - [ ] ISP optimization
+ - [ ] FFCC AWB
+ - [ ] Add methods for comparison ([HDR+ implementation in C](https://github.com/timothybrooks/hdr-plus) & [weight FBA](https://github.com/remicongee/Fourier-Burst-Accumulation)) 
 
-| Bayer Domain Processing | RGB Domain Processing | YUV Domain Processing |
-|---|---|---|
-| <ul><li> ✅ Dead Pixel Correction</li><li> ✅ Black Level Compensation</li><li> ✅ Lens Shading Mask</li><li> ✅ Anti-aliasing Noise Filter</li><li> ⬜️ HDR/Tone Mapping</li><li> ✅ Auto White Balance Gain Control</li><li> 🤔 Color Filter Array Interpolation</li> |  <li> ✅ Gamma Correction</li><li> ✅ Color Correction Matrix</li><li> ✅ Color Space Conversion</li>  | <li> ⬜️ Noise Filter for Luma/Chroma</li><li> ✅ Edge Enhancement</li><li> ⬜️ False Color Suppression</li> <li> ⬜️ Hue/Saturation Control</li> </ul> |
-<hr />
+### Sensei Todo
+ - [ ] Code framework
+ - [ ] Writing framework

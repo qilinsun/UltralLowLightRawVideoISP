@@ -1,0 +1,113 @@
+module_enable_status:                 # do NOT modify modules order
+  dpc: True
+  blc: True
+  aaf: True
+  awb: True # 16bits
+  cnf: True
+  cfa: True
+  ccm: True
+  gac: True
+  csc: False
+  nlm: False
+  bnf: False
+  ceh: False
+  eeh: False
+  fcs: False
+  hsc: False
+  bcc: False
+  scl: False
+
+hardware:
+  raw_width: 2160
+  raw_height: 1280
+  raw_bit_depth: 16
+  bayer_pattern: rggb
+
+
+# -------------------- Module Algorithms Parameters --------------------
+
+dpc:
+  diff_threshold: 30
+
+blc:
+  bl_r: -0                             # a subtractive value, not additive!
+  bl_gr: -0
+  bl_gb: -0
+  bl_b: -0
+  alpha: 0                            # x1024
+  beta: 0                             # x1024
+
+aaf: ~
+
+awb:
+  r_gain: &r_gain 1068                 # x1024
+  gr_gain: 1024                       # x1024
+  gb_gain: 1024                       # x1024
+  b_gain: &b_gain 1535                 # x1024
+
+cnf:
+  diff_threshold: 0
+  r_gain: *r_gain                     # x1024
+  b_gain: *b_gain                     # x1024
+
+cfa:
+  mode: malvar
+
+ccm:
+  ccm:
+    # - [ 1024, 0, 0, 0 ]                # x1024
+    # - [ 0, 1024, 0, 0 ]
+    # - [ 0, 0, 1024, 0 ]
+    # - (np.array([ 0.76031811,  0.19460622, -0.09200754, -0.04863701]) * 1024).astype(np.int)
+    # - (np.array([-0.30808756,  1.67370372, -0.08039811, -0.73159016]) * 1024).astype(np.int)
+    # - (np.array([ 0.2734654 , -0.53701519,  2.24788416, -1.26116684]) * 1024).astype(np.int)
+    - [778, 199, -94, -49]
+    - [-315, 1713,  -82, -749]
+    - [  280,  -549,  2301, -1291]
+    # - [ 0.76031811,  0.19460622, -0.09200754, -0.04863701]
+    # - [-0.30808756,  1.67370372, -0.08039811, -0.73159016]
+    # - [ 0.2734654 , -0.53701519,  2.24788416, -1.26116684]
+
+
+gac:
+  gain: 256.                           # x256
+  gamma: 0.454
+
+csc: ~
+
+nlm:
+  search_window_size: 9
+  patch_size: 3
+  h: 10                               # larger value has stronger smoothing effect
+
+bnf:
+  intensity_sigma: 5.5                # larger value has stronger smoothing effect
+  spatial_sigma: 5.5                  # larger value has stronger smoothing effect
+  # intensity_sigma: 0.8                # larger value has stronger smoothing effect
+  # spatial_sigma: 0.8                  # larger value has stronger smoothing effect
+
+ceh:
+  tiles: [4, 6]
+  clip_limit: 0.001
+
+eeh:
+  edge_gain: 384                      # x256
+  flat_threshold: 2                   # delta <= flat_threshold: set delta to 0
+  edge_threshold: 4                   # delta > edge_threshold: increase delta by edge_gain
+  delta_threshold: 64                 # clip value after edge LUT
+
+fcs:
+  delta_min: 2
+  delta_max: 4
+
+hsc:
+  hue_offset: 0                       # in degree
+  saturation_gain: 256                # x256
+
+bcc:
+  brightness_offset: 0
+  contrast_gain: 256                  # x256
+
+scl:
+  width: 1920
+  height: 1080
