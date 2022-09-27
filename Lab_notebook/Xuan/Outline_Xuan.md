@@ -22,13 +22,11 @@ code：(基于目前Pipeline: FIFO + HDR Plus Alignment + HDR Plus Merge + ISP)
 
 （1）去除motion blur: 可考虑使用维纳滤波对其进行去除
 
-思路：利用视频帧图像图块，估计出运动轨迹的角度和长度，使用维纳滤波
+Step 1: 估计出模糊核的方向和长度
 
-Step 1: 估计出当前帧和bucket中其余参考帧的运动（目前代码中的HDR Plus Alignment中计算出的运动）
+Step 2: 根据估计的估计出的角度和长度，计算PSF
 
-Step 2: 根据估计的运动计算相邻帧之间的运动角度 (e.g: 0->1, 1->2,……)，计算相应的PSF
-
-Step 3: 使用维纳滤波对bucket中的所有图像进行运动模糊去除 (图像是灰度图)
+Step 3: 使用维纳滤波对图像进行运动模糊去除 (图像是灰度图)
 
 ------
 
