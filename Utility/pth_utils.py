@@ -24,7 +24,8 @@ import torch
 from torch.utils.data import Dataset
 
 from einops import rearrange, reduce, repeat
-
+from Utility.PSF import *
+from Utility.wiener import inverse_filter
 
 
 verbose = 0
@@ -537,6 +538,29 @@ class LLR2V(torch.nn.Module):
         
         # Hdrplus pipeline
         motionVectors, alignedTiles = alignHdrplus(referenceImg,alternateImgs,self.mbSize)
+        
+        # Deblur
+        motion_length, motion_angle = motion_vector_length(motionVectors)
+        PSF = get_motion_blur(motion_length, motion_angle, alignedTiles)
+
+        deb_img = np.zeros(alignedTiles.shape)
+        deb_img[-1, ...] = alignedTiles[-1, ...]
+        for j in range(PSF.shape[0]):
+            for m in range(PSF.shape[1]):
+                for n in range(PSF.shape[2]):
+                    blurred = repeat(alignedTiles[j, m, n, ...], 'h w -> b h w c', b=1, c=1) 
+                    PSF_trans = repeat(PSF[j, m, n, ...], 'h w -> h w c d', c=1, d=1)
+                    # transfer tensor
+                    blurred = torch.tensor(blurred)
+                    PSF_trans = torch.tensor(PSF_trans)
+                    deblur_img = inverse_filter(blurred, blurred, PSF_trans, init_gamma=1.5)
+                    deblur_img = deblur_img.squeeze()
+                    deblur_img = deblur_img.detach().numpy()
+
+                    deb_img[j, m, n, ...] = deblur_img
+
+        alignedTiles = deb_img
+        
         mergedImage = mergeHdrplus(referenceImg, alignedTiles, self.padding, 
                                    self.lambdaS, self.lambdaR, self.params, self.options)
         mergedImage = np.clip(mergedImage,0,self.whiteLevel)
