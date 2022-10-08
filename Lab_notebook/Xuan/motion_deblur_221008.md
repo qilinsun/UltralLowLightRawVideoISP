@@ -106,11 +106,11 @@ def get_motion_blur(length, angle, aligntiles):
 ```
 + 根据MV计算出的PSF结果(该结果乘了255之后的显示结果)
 
-![PSF结果](../Docs/starlight/PSF/PSF_221007/0.png) 
+![PSF结果](../../Docs/starlight/PSF/PSF_221007/0.png) 
 
 + HDR+ MV 
 
-![运动矢量](../Docs/starlight/align_mismatch/hdrplus_mv/vector_0.png)
+![运动矢量](../../Docs/starlight/align_mismatch/hdrplus_mv/vector_0.png)
 
 **Step 3**: 普通维纳滤波
 
@@ -168,19 +168,19 @@ def wiener(input, PSF, eps, K=0.01):
 
 + deblur之前的结果_17Seq0
 
-![deblur之前的结果_17Seq0](../Docs/starlight/ori_img/0.jpg)
+![deblur之前的结果_17Seq0](../../Docs/starlight/ori_img/0.jpg)
 
 + gamma=0.5_17Seq0
 
-![gamma=0.5_17Seq0](../Docs/starlight/Motion_deblur/gamma0.5/0.jpg)
+![gamma=0.5_17Seq0](../../Docs/starlight/Motion_deblur/gamma0.5/0.jpg)
 
 + gamma=1.5_17Seq0
 
-![gamma=1.5_17Seq0](../Docs/starlight/Motion_deblur/gamma1.5/0.jpg)
+![gamma=1.5_17Seq0](../../Docs/starlight/Motion_deblur/gamma1.5/0.jpg)
 
 + gamma=5_17Seq0
 
-![gamma=5_17Seq0](../Docs/starlight/Motion_deblur/gamma5/0.jpg)
+![gamma=5_17Seq0](../../Docs/starlight/Motion_deblur/gamma5/0.jpg)
 
 
 ### 目前的问题
