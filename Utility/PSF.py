@@ -10,7 +10,7 @@ def motion_angle(motionvetor):
     motionvetor_y = motionvetor[..., 0]
     motionvetor_x = motionvetor[..., 1]
 
-    # 使用余弦定理计算cos_there的弧度值
+    # 使用反正切计算弧度值
     angle = np.arctan2(motionvetor_y, motionvetor_x)
     # 将弧度转化为度
     # angle = np.rad2deg(cos_theta)
