@@ -1,6 +1,31 @@
-## 2022.9.28——2022.10.7
 
-### 去模糊部分：
+## 去模糊部分：
+
+### 2022.10.8-10.14 总结
+
++ 在先前的pipline的基础上，在merge前使用维纳滤波(+ TV) / fast deconvoltion，效果不明显
+
++ 看了相关噪声标定的方法：ELD，方差和均值拟合的方法
+
++ 修改了pipline图，整理代码框架
+
+![](../../Docs/Images/pipeline_221013.png)
+
++ 导入matlab里运动估计方法，得到MV
+
+### 2022.10.8-10.14 代码和对应测试结果
+
++ 使用H264方法和维纳滤波得到的最终结果,gamma=0.5(无overlap的)
+
+![](../../Docs/starlight/Motion_deblur/9_new%20pipeline_gamma0.5/0.jpg)
+
++ 使用H264方法和维纳滤波的结合, gamma=0.15(overlap的)
+
+![](../../Docs/starlight/Motion_deblur/9_deblur_overlap_gamma0.15/0.jpg)
+
+------
+
+### 2022.9.28——2022.10.7
 
 **Step 1**: 目前的算法已经估计出了运动向量，根据向量计算长度和角度，
 
