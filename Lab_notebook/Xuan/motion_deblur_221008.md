@@ -17,7 +17,7 @@
 
 + 使用H264方法和维纳滤波得到的最终结果,gamma=0.5(无overlap的)
 
-![](../../Docs/starlight/Motion_deblur/9_new%20pipeline_gamma0.5/0.jpg)
+![](../../Docs/starlight/Motion_deblur/9_new pipeline_gamma0.5/0.jpg)
 
 + 使用H264方法和维纳滤波的结合, gamma=0.15(overlap的)
 
