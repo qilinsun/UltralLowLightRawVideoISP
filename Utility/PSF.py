@@ -89,3 +89,15 @@ def get_motion_blur(length, angle, aligntiles):
         cv2.imwrite(psf_path, PSF_vis[v])
 
     return PSF_sum
+
+# new PSF from github
+
+def motion_kernel(angle, d, sz=65):
+    kern = np.ones((1, d), np.float32)
+    c, s = np.cos(angle), np.sin(angle)
+    A = np.float32([[c, -s, 0], [s, c, 0]])
+    sz2 = sz // 2
+    A[:,2] = (sz2, sz2) - np.dot(A[:,:2], ((d-1)*0.5, 0))
+    kern = cv2.warpAffine(kern, A, (sz, sz), flags=cv2.INTER_CUBIC)
+    
+    return kern
