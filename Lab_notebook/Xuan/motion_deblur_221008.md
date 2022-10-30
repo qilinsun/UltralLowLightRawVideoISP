@@ -16,9 +16,9 @@
 starlight的算法，无运动模糊处理的算法，上述pipeline算法对比结果如下
 
 |-----------------|----------------|
-| Starlight              |![]()            
-| Pipeline without deblur             |![]()            
-| Pipeline1030           |![]()           
+| Starlight              |![](../../Docs/Images/20221030结果/starlight/3.png)            
+| Pipeline without deblur             |![](../../Docs/Images/20221030结果/without deblur/3.png)            
+| Pipeline1030           |![](../../Docs/Images/20221030结果/with deblur/3.png)           
 
 ### 2022.10.22组会
 
