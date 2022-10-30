@@ -10,11 +10,13 @@ raw视频图像的去噪，图如下所示 (目前暂定)
 
 ![](../../Docs/Images/Pipeline1030.png)
 
-+ 根据以上pipeline图得到的结果图(输入已更改，不是int8),输入16帧由于有些图像并没有经过去模糊处理的则舍弃，在对齐和合并阶段使用的帧数是1个当前帧和11个参考帧，共12帧
++ 根据以上pipeline图得到的结果如下(输入已更改，不是int8),输入16帧由于有些图像并没有经过去模糊处理的则舍弃，在对齐和合并阶段使用的帧数是1个当前帧和11个参考帧，共12帧
 
-![](../../Docs/Images/20221030结果/三个方法对比结果.png)
+![](../../Docs/Images/20221030结果/with deblur/3.png)
 
 + starlight的算法，无运动模糊处理的算法，上述pipeline算法对比结果如下
+
+![](../../Docs/Images/20221030结果/三个方法对比结果.png)
 
 具体结果见(https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/Docs/Images/20221030结果)
    
