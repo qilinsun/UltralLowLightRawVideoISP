@@ -16,7 +16,6 @@ raw视频图像的去噪，图如下所示 (目前暂定)
 starlight的算法，无运动模糊处理的算法，上述pipeline算法对比结果如下
 
 ![](../../Docs/Images/20221030结果/三个方法对比结果.png)
-
 具体结果见(https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/Docs/Images/20221030结果)
    
 ### 2022.10.22组会
