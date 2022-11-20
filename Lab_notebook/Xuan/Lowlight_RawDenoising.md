@@ -56,7 +56,7 @@
 
 + Side window filtering [python code](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/Utility/SideWindowFilter.py)
    
-#### 实验结果，所有结果在github(https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/Docs/Images/221120结果)
+#### 实验结果，所有结果在[github](https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/Docs/Images/221120结果)
 
 + Starlight数据集：Starlight, Pipeline v1(hdr+), Pipleine v2(deblur+hdr+), Pipeline v3(deep denoiser+deblur+hdr+), Pipeline v4(side+deblur+hdr+)
 
@@ -64,7 +64,7 @@
 | :----: | -------------------------------------------------------- | :------------------------------------------------------: | :------------------------------------------------------: | :------------------------------------------------------: | :------------------------------------------------------: |
 | Result | ![](../../Docs/Images/221120结果/starlight/3.png) | ![](../../Docs/Images/20221030结果/without_deblur/3.png) | ![](../../Docs/Images/221120结果/pipeline_deblur(15)/3.png) | ![](../../Docs/Images/221120结果/pipeline_deblur(15)_denoise(900)/3.png) | ![](../../Docs/Images/221120结果/Pipeline_side_deblur(15)/3.png) |
 
-![](../../Docs/Images/221120结果/starlight/3.png)
+![](../../Docs/Images/20221030结果/with_deblur/3.png)
 
 ### 2022.11.12组会
 
