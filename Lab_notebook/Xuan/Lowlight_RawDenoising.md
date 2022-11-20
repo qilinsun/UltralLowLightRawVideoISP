@@ -42,13 +42,27 @@
    + **目前的问题**：由以上数据训练出的unet网络效果一般，后面对此网络的训练使用的数据是否只用在gt图像上加入fixed pattern noise，从而达到去除目前starlight数据集中fixed 
                    pattern noise的目的
 
-   +统计了Deblur网络使用不同block的参数量，并训练了block为9的网络，同时放入到了pipelien中进行实验
+   + 统计了Deblur网络使用不同block的参数量，并训练了block为9的网络，同时放入到了pipelien中进行实验
    
  + side window filtering方法的实验
 
 ### 2022.11.13-11.20 代码和对应测试结果
 
-+ 代码已经上传到github中
+#### 代码已经上传到github中
+
++ 预处理的降噪网络和训练代码，Code(https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/deep_denoising)
+
++ 去模糊代码，ESTRNN(https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/network)和参数文件(https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/para)
+
++ Side window filtering python code(https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/Utility/SideWindowFilter.py)
+   
+#### 实验结果，所有结果在github(https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/Docs/Images/221120结果)
+
++ Starlight数据集：Starlight, Pipeline v1(hdr+), Pipleine v2(deblur+hdr+), Pipeline v3(deep denoiser+deblur+hdr+), Pipeline v4(side+deblur+hdr+)
+
+| Method | Starlight                                                |                       Pipeline v1                        |                       Pipeline v2                        |                       Pipeline v3                        |                       Pipeline v4                        |
+| :----: | -------------------------------------------------------- | :------------------------------------------------------: | :------------------------------------------------------: | :------------------------------------------------------: | :------------------------------------------------------: |
+| Result | ![](../../Docs/Images/221120结果/starlight/3.png) | ![](../../Docs/Images/20221030结果/without_deblur/3.png) | ![](../../Docs/Images/221120结果/pipeline_deblur(15)/3.png) | ![](../../Docs/Images/221120结果/pipeline_deblur(15)_denoise(900)/3.png) | ![](../../Docs/Images/221120结果/Pipeline_side_deblur(15)/3.png) |
 
 ### 2022.11.12组会
 
