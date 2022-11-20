@@ -50,11 +50,11 @@
 
 #### 代码已经上传到github中
 
-+ 预处理的降噪网络和训练代码，Code(https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/deep_denoising)
++ 预处理的降噪网络和训练代码，[Code](https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/deep_denoising)
 
-+ 去模糊代码，ESTRNN(https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/network)和参数文件(https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/para)
++ 去模糊代码，[ESTRNN](https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/network)和[参数文件](https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/para)
 
-+ Side window filtering python code(https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/Utility/SideWindowFilter.py)
++ Side window filtering [python code](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/Utility/SideWindowFilter.py)
    
 #### 实验结果，所有结果在github(https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/Docs/Images/221120结果)
 
@@ -63,6 +63,8 @@
 | Method | Starlight                                                |                       Pipeline v1                        |                       Pipeline v2                        |                       Pipeline v3                        |                       Pipeline v4                        |
 | :----: | -------------------------------------------------------- | :------------------------------------------------------: | :------------------------------------------------------: | :------------------------------------------------------: | :------------------------------------------------------: |
 | Result | ![](../../Docs/Images/221120结果/starlight/3.png) | ![](../../Docs/Images/20221030结果/without_deblur/3.png) | ![](../../Docs/Images/221120结果/pipeline_deblur(15)/3.png) | ![](../../Docs/Images/221120结果/pipeline_deblur(15)_denoise(900)/3.png) | ![](../../Docs/Images/221120结果/Pipeline_side_deblur(15)/3.png) |
+
+![](../../Docs/Images/221120结果/starlight/3.png)
 
 ### 2022.11.12组会
 
