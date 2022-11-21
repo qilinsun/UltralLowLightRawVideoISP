@@ -28,8 +28,8 @@ from para import Parameter
 from data.utils import normalize, normalize_reverse
 from argparse import ArgumentParser
 from model import Model
-import rawpy
 from network.Sim_Unet import Denoise_fpn
+from Utility.SideWindowFilter import SideWindowFilter
 
 
 verbose = 0
@@ -542,7 +542,7 @@ class LLR2V(torch.nn.Module):
         
         # denoising
         for burst_num in range(singleBurst.shape[0]):
-        # convert 
+          # convert 
           merge_h, merge_w = singleBurst[burst_num].shape
           mergedImage_exp = np.expand_dims(singleBurst[burst_num], axis=0)
           merge_rggb = np.concatenate((mergedImage_exp[:, 0:merge_h:2, 0:merge_w:2], # R
@@ -550,76 +550,85 @@ class LLR2V(torch.nn.Module):
                                       mergedImage_exp[:, 1:merge_h:2, 1:merge_w:2], # B
                                       mergedImage_exp[:, 1:merge_h:2, 0:merge_w:2]), axis=0) # G
 
-          # deep denoiser
-          # Step 1: load model
-          model_unet = Denoise_fpn()
-          model_unet = model_unet.cuda()
-          model_unet_path = '/home/cuhksz-aci-03/Documents/pytorch-Learning-to-See-in-the-Dark-master/saved_model/checkpoint_sony_e0900.pth'
-          model_unet.load_state_dict(torch.load(model_unet_path))
-          # Step 2: unet
-          model_unet.eval()
-          merge_exp = np.expand_dims(np.float32(merge_rggb), axis=0)
-          merge_rggb_torch = torch.from_numpy(merge_exp).float().cuda()
-          merge_rggb_out = model_unet(merge_rggb_torch)
-          merge_rggb_cpu = (merge_rggb_out.squeeze()).detach().cpu().numpy()
-          merge_rggb_cpu = merge_rggb_cpu.transpose(1, 2, 0)
-          # Step 3: clip
-          merge_img = np.clip(merge_rggb_cpu, 0, self.whiteLevel)
-
-          # convert 
-          H, W, C = merge_img.shape
-          mergimg = np.empty([H * 2, W * 2])
-          mergimg[::2, ::2] = merge_img[..., 0]  # R
-          mergimg[::2, 1::2] = merge_img[..., 1]  # G
-          mergimg[1::2, ::2] = merge_img[..., 3]  # G
-          mergimg[1::2, 1::2] = merge_img[..., 2]  # B
+          # SideWindowFilter Denoise
+           rggb_expand = np.expand_dims(np.float32(merge_rggb), axis=0)
+           rggb_expand_torch = torch.tensor(rggb_expand, dtype=torch.float32, device='cuda')
+           sidewindow = SideWindowFilter(radius=3, iteration=1)
+           merge_rggb_out = sidewindow.forward(rggb_expand_torch)
+           merge_rggb_cpu = (merge_rggb_out.squeeze()).detach().cpu().numpy()
+           merge_rggb_cpu = merge_rggb_cpu.transpose(1, 2, 0)
+           merge_img = np.clip(np.float32(merge_rggb_cpu), 0, self.whiteLevel)
           
-          singleBurst[burst_num, ...] = mergimg
+           # deep denoiser
+           # Step 1: load model
+           model_unet = Denoise_fpn()
+           model_unet = model_unet.cuda()
+           model_unet_path = '/home/cuhksz-aci-03/Documents/pytorch-Learning-to-See-in-the-Dark-master/saved_model/checkpoint_sony_e0900.pth'
+           model_unet.load_state_dict(torch.load(model_unet_path))
+           # Step 2: unet
+           model_unet.eval()
+           merge_exp = np.expand_dims(np.float32(merge_rggb), axis=0)
+           merge_rggb_torch = torch.from_numpy(merge_exp).float().cuda()
+           merge_rggb_out = model_unet(merge_rggb_torch)
+           merge_rggb_cpu = (merge_rggb_out.squeeze()).detach().cpu().numpy()
+           merge_rggb_cpu = merge_rggb_cpu.transpose(1, 2, 0)
+           # Step 3: clip
+           merge_img = np.clip(merge_rggb_cpu, 0, self.whiteLevel)
+
+           # convert 
+           H, W, C = merge_img.shape
+           mergimg = np.empty([H * 2, W * 2])
+           mergimg[::2, ::2] = merge_img[..., 0]  # R
+           mergimg[::2, 1::2] = merge_img[..., 1]  # G
+           mergimg[1::2, ::2] = merge_img[..., 3]  # G
+           mergimg[1::2, 1::2] = merge_img[..., 2]  # B
+          
+           singleBurst[burst_num, ...] = mergimg
        
-      # ESTRNN deblur
-      # set parameters
-      parser = ArgumentParser()
-      parser.add_argument('--ckpt', type=str, required=True, default='/home/cuhksz-aci-03/Documents/ESTRNN-master/checkpoints/model_best.pth.tar', help="the path of checkpoint of pretrained model")
-      args = parser.parse_args()
+       # ESTRNN deblur
+       # set parameters
+       parser = ArgumentParser()
+       parser.add_argument('--ckpt', type=str, required=True, default='/home/cuhksz-aci-03/Documents/ESTRNN-master/checkpoints/model_best.pth.tar', help="the path of checkpoint of pretrained model")
+       args = parser.parse_args()
 
-      # load model
-      para = Parameter().args
-      model = Model(para).cuda()
-      checkpoint_path = args.ckpt
-      checkpoint = torch.load(checkpoint_path, map_location=lambda storage, loc: storage.cuda())
-      model = nn.DataParallel(model)
-      model.load_state_dict(checkpoint['state_dict'])
+       # load model
+       para = Parameter().args
+       model = Model(para).cuda()
+       checkpoint_path = args.ckpt
+       checkpoint = torch.load(checkpoint_path, map_location=lambda storage, loc: storage.cuda())
+       model = nn.DataParallel(model)
+       model.load_state_dict(checkpoint['state_dict'])
 
-      seq_length = len(singleBurst)
-      if para.test_frames > seq_length:
-          para.test_frames = seq_length
-      input_seq = []
-      val_range = 2**16-1
-      start = 0
-      end = len(singleBurst)
-      # load data
-      for i in range(len(singleBurst)):
-          blur_img = singleBurst[i][np.newaxis, ...]
-          input_seq.append(blur_img[np.newaxis, ...])
-      input_seq = np.concatenate(input_seq)[np.newaxis, :]
-      model.eval()
-      with torch.no_grad():
-          input_seq = normalize(torch.from_numpy(input_seq).float().cuda(), centralize=para.centralize,
-                                normalize=para.normalize, val_range=val_range)
-          output_seq = model([input_seq, ])
-          if isinstance(output_seq, (list, tuple)):
-              output_seq = output_seq[0]
-          output_seq = output_seq.squeeze(dim=0)
+       seq_length = len(singleBurst)
+       if para.test_frames > seq_length:
+           para.test_frames = seq_length
+       input_seq = []
+       val_range = 2**16-1
+       start = 0
+       end = len(singleBurst)
+       # load data
+       for i in range(len(singleBurst)):
+           blur_img = singleBurst[i][np.newaxis, ...]
+           input_seq.append(blur_img[np.newaxis, ...])
+       input_seq = np.concatenate(input_seq)[np.newaxis, :]
+       model.eval()
+       with torch.no_grad():
+           input_seq = normalize(torch.from_numpy(input_seq).float().cuda(), centralize=para.centralize,
+                                 normalize=para.normalize, val_range=val_range)
+           output_seq = model([input_seq, ])
+           if isinstance(output_seq, (list, tuple)):
+               output_seq = output_seq[0]
+           output_seq = output_seq.squeeze(dim=0)
 
-      for frame_idx in range(para.past_frames, end - start - para.future_frames):
-          deblur_img = output_seq[frame_idx - para.past_frames]
-          deblur_img = normalize_reverse(deblur_img, centralize=para.centralize, normalize=para.normalize,
-                                               val_range=val_range)
-          deblur_img = deblur_img.detach().cpu().numpy().squeeze()
-          deblur_img = np.clip(deblur_img, 0, val_range)
-          deblur_img = (deblur_img).astype(np.float32)
+       for frame_idx in range(para.past_frames, end - start - para.future_frames):
+           deblur_img = output_seq[frame_idx - para.past_frames]
+           deblur_img = normalize_reverse(deblur_img, centralize=para.centralize, normalize=para.normalize,
+                                                val_range=val_range)
+           deblur_img = deblur_img.detach().cpu().numpy().squeeze()
+           deblur_img = np.clip(deblur_img, 0, val_range)
+           deblur_img = (deblur_img).astype(np.float32)
 
-          singleBurst[frame_idx, ...] = deblur_img
+           singleBurst[frame_idx, ...] = deblur_img
           
         referenceImg = singleBurst[2, :, :] 
         alternateImgs = singleBurst[3:14, :, :]  
