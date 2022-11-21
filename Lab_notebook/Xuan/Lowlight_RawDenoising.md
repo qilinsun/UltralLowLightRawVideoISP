@@ -65,7 +65,7 @@
 
 | Method | Starlight                                                |                       Pipeline v1                        |                       Pipeline v2                        |                       Pipeline v3                        |                       Pipeline v4                        |
 | :----: | -------------------------------------------------------- | :------------------------------------------------------: | :------------------------------------------------------: | :------------------------------------------------------: | :------------------------------------------------------: |
-| Result | ![](../../Docs/Images/221120结果/starlight/3.png) | ![](../../Docs/Images/20221030结果/without_deblur/3.png) | ![](../../Docs/Images/221120结果/pipeline_deblur(15)/3.png) | ![](../../Docs/Images/221120结果/pipeline_deblur(15)_denoise(900)/3.png) | ![](../../Docs/Images/221120结果/Pipeline_side_deblur(15)/3.png) |
+| Result | ![](../../Docs/Images/221120结果/starlight/3.png) | ![](../../Docs/Images/221120结果/pipeline_crop/3.png) | ![](../../Docs/Images/221120结果/pipeline_deblur(15)/3.png) | ![](../../Docs/Images/221120结果/pipeline_deblur(15)_denoise(900)/3.png) | ![](../../Docs/Images/221120结果/Pipeline_side_deblur(15)/3.png) |
 
 + 自己拍摄的数据集结果
 
