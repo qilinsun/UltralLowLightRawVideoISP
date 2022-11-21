@@ -13,6 +13,55 @@
 | :----: | :---------: | :---------: |
 | Result       | ![](../../Docs/Images/221120结果/Pipeline_side_deblur(15)/3.png)           |![](../../Docs/Images/221120结果/deblur_side_pipeline/3.png)             |
 
++ 按照sony的阵列进行调整，阵列如下：
+
+![](../../Docs/Images/sony-quad-bayer.jpg)
+
++ 调整代码如下：
+
+```python
+# 先将4个像素进行平均
+def general_bayer(img):
+    bayer_img = img.raw_image_visible.astype(np.float32)
+    bayer_img_shape = bayer_img.shape
+    H = bayer_img_shape[0]
+    W = bayer_img_shape[1]
+
+    general_bayerimg = np.zeros((int(H/2), int(W/2)))
+    new_h = 0
+    new_w = 0
+
+    for h in range(0, H, 2):
+        for w in range(0, W, 2):
+            r1 = bayer_img[h, w]
+            r2 = bayer_img[h, w+1]
+            r3 = bayer_img[h+1, w]
+            r4 = bayer_img[h+1, w+1]
+            r_mean = (r1+r2+r3+r4)*0.25
+            general_bayerimg[new_h, new_w] = r_mean
+            new_w = new_w + 1
+
+        new_h = new_h + 1
+        new_w = 0
+        
+    return general_bayerimg
+    
+# 然后重新打包成bayer形式
+def pack_raw(raw):
+    im = np.expand_dims(raw, axis=-1)
+    img_shape = im.shape
+    H = img_shape[0]
+    W = img_shape[1]
+
+    out = np.concatenate((im[1:H:2, 0:W:2, :], # R
+                          im[1:H:2, 1:W:2, :], # G
+                          im[0:H:2, 1:W:2, :], # B
+                          im[0:H:2, 0:W:2, :]), axis=-1) # G
+                          
+    return out
+
+------
+
 ### 2022.11.19组会
 
 #### 目前的pipeline问题：细节信息部分提升了，但背景信息丢失了
