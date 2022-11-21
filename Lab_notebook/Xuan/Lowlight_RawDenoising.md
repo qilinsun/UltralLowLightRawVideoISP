@@ -11,7 +11,7 @@
 
 | Method | Pipeline v4 | Pipeline v5 |
 | :----: | :---------: | :---------: |
-| Result       | ![](../../Docs/Images/221120结果/Pipeline_side_deblur(15)/3.png) )            |![](../../Docs/Images/221120结果/deblur_side_pipeline/3.png)             |
+| Result       | ![](../../Docs/Images/221120结果/Pipeline_side_deblur(15)/3.png)           |![](../../Docs/Images/221120结果/deblur_side_pipeline/3.png)             |
 
 ### 2022.11.19组会
 
