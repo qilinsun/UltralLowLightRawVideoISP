@@ -59,7 +59,7 @@ def pack_raw(raw):
                           im[0:H:2, 0:W:2, :]), axis=-1) # G
                           
     return out
-
+```
 ------
 
 ### 2022.11.19组会
