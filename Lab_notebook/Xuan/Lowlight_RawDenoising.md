@@ -54,11 +54,12 @@
 
 + 预处理的降噪网络和训练代码，[Code](https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/deep_denoising)
 
-+ 去模糊代码，[ESTRNN](https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/network)和[参数文件](https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/para)
++ 去模糊代码，[ESTRNN](https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/model)和[参数文件](https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/para)
 
 + Side window filtering [python code](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/Utility/SideWindowFilter.py)
    
 #### 实验结果，所有结果在[github](https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/Docs/Images/221120结果)
+#### 以下实验结果使用的deblur网络均是15个block的，参数量为2.82M
 
 + Starlight数据集：Starlight, Pipeline v1(hdr+), Pipleine v2(deblur+hdr+), Pipeline v3(deep denoiser+deblur+hdr+), Pipeline v4(side+deblur+hdr+)
 
