@@ -1,6 +1,18 @@
 
 ## 工作进程：
 
+### 2022.11.21
+
++ 调整了deblur和side window filtering的位置——pipeline v5，结果如下
+
+![](../../Docs/Images/221120结果/deblur_side_pipeline/3.png)
+
++ 与之前的pipeline v4结果对比
+
+| Method | Pipeline v4 | Pipeline v5 |
+| :----: | :---------: | :---------: |
+| Result       | ![](../../Docs/Images/221120结果/Pipeline_side_deblur(15)/3.png) )            |![](../../Docs/Images/221120结果/deblur_side_pipeline/3.png)             |
+
 ### 2022.11.19组会
 
 #### 目前的pipeline问题：细节信息部分提升了，但背景信息丢失了
