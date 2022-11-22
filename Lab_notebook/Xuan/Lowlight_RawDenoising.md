@@ -53,10 +53,10 @@ def pack_raw(raw):
     H = img_shape[0]
     W = img_shape[1]
 
-    out = np.concatenate((im[1:H:2, 0:W:2, :], # R
-                          im[1:H:2, 1:W:2, :], # G
-                          im[0:H:2, 1:W:2, :], # B
-                          im[0:H:2, 0:W:2, :]), axis=-1) # G
+    out = np.concatenate((im[1:H:2, 0:W:2, :], 
+                          im[1:H:2, 1:W:2, :], 
+                          im[0:H:2, 1:W:2, :], 
+                          im[0:H:2, 0:W:2, :]), axis=-1) 
                           
     return out
 ```
