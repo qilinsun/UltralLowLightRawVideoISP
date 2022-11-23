@@ -1,7 +1,7 @@
 
 ## 工作进程：
 
-### 2022.11.21
+### 2022.11.21-23
 
 + 调整了deblur和side window filtering的位置——pipeline v5，结果如下
 
@@ -17,50 +17,7 @@
 
 ![](../../Docs/Images/sony-quad-bayer.jpg)
 
-+ 调整代码如下：
-
-```python
-# 先将4个像素进行平均
-def general_bayer(img):
-    bayer_img = img.raw_image_visible.astype(np.float32)
-    bayer_img_shape = bayer_img.shape
-    H = bayer_img_shape[0]
-    W = bayer_img_shape[1]
-
-    general_bayerimg = np.zeros((int(H/2), int(W/2)))
-    new_h = 0
-    new_w = 0
-
-    for h in range(0, H, 2):
-        for w in range(0, W, 2):
-            r1 = bayer_img[h, w]
-            r2 = bayer_img[h, w+1]
-            r3 = bayer_img[h+1, w]
-            r4 = bayer_img[h+1, w+1]
-            r_mean = (r1+r2+r3+r4)*0.25
-            general_bayerimg[new_h, new_w] = r_mean
-            new_w = new_w + 1
-
-        new_h = new_h + 1
-        new_w = 0
-        
-    return general_bayerimg
-    
-# 然后重新打包成bayer形式
-def pack_raw(raw):
-    im = np.expand_dims(raw, axis=-1)
-    img_shape = im.shape
-    H = img_shape[0]
-    W = img_shape[1]
-
-    out = np.concatenate((im[1:H:2, 0:W:2, :], 
-                          im[1:H:2, 1:W:2, :], 
-                          im[0:H:2, 1:W:2, :], 
-                          im[0:H:2, 0:W:2, :]), axis=-1) 
-                          
-    return out
-```
-按照上面的阵列调整完，整体颜色还是呈粉色，调了isp里的参数颜色发生了变化，自己拍摄的图像的颜色是不是与isp中的参数是否相关
+**截取了部分图像进行测试，且第一行和第一列截取掉，截取的shape[1:1425, 1:2129],结果还是呈粉色，这个结果的颜色是不是和参数的设置相关**
 
 + 将之前的去噪网络，换了数据集之后进行重新训练，现在的数据是SID的GT和GT+fixed pattern noise，然后在starlight数据集上在测试
 
