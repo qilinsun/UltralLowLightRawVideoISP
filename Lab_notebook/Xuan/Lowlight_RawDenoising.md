@@ -1,7 +1,7 @@
 
 ## 工作进程：
 
-### 2022.11.21-23
+### 2022.11.21-24
 
 + 调整了deblur和side window filtering的位置——pipeline v5，结果如下
 
@@ -21,7 +21,42 @@
 
 + 将之前的去噪网络，换了数据集之后进行重新训练，现在的数据是SID的GT和GT+fixed pattern noise，然后在starlight数据集上在测试
 
-+ 调整整个pipeline的参数，看是否可以提升图像的效果
+#### 自己拍摄的数据集调试的结果
+
++ 之前颜色的问题应该是在raw2rgb时一些过程参数的设置不对，然后更换了比较简单的处理方式进行尝试,更换方法如下
+
+```python
+# raw2rgb
+self.rawpyParam1 = {
+    'demosaic_algorithm': rawpy.DemosaicAlgorithm.AHD,  # used in HDR+ supplement
+    'half_size': False,
+    'use_camera_wb': True,
+    'use_auto_wb': False,
+    'no_auto_bright': True,
+    'output_color': rawpy.ColorSpace.sRGB,
+    'output_bps': 16}
+# hdr+ postprocess
+pre_raw = self.load_video_raw('/media/cuhksz-aci-03/数据/CUHK_SZ/',seqID='8')
+pre_raw.raw_image_visible[0:1420, 0:2120] = mergedImage[:]
+post_image = pre_raw.postprocess(**self.rawpyParam1)
+
+# To HSV and local tone mapping
+cfa = (post_image / 65535. * 255.).astype(np.float32)# scale and set type for cv2
+hsv = cv2.cvtColor(cfa, cv2.COLOR_RGB2HSV) 
+hsvOperator = AutoGammaCorrection(hsv)
+enhanceV = hsvOperator.execute()
+hsv[...,-1] = enhanceV*255.
+enhanceRGB = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
+```
++ 结果如下，但是转换出的rgb图像偏绿色，local tone mapping的结果也是偏绿色
+
+**用的deblur网络是9个block，参数1.82M**
+
+**所有结果见[文件](https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/Docs/Images/1124%E7%BB%93%E6%9E%9Csrgb)**
+
+| Method |Original|Pipeline v1|Pipeline v2|Pipeline v3|Pipeline v4|
+| :----: | -------------------------------------------------------- | :------------------------------------------------------: | :------------------------------------------------------: | :------------------------------------------------------: | :------------------------------------------------------: |
+| Result | ![](../../Docs/Images/1124结果srgb/seq8_ori/srgb.png) | ![](../../Docs/Images/1124结果srgb/seq8/srgb_part.png) | ![](../../Docs/Images/1124结果srgb/seq8/pipeline2param1/srgb_part.png) | ![](../../Docs/Images/1124结果srgb/seq8/hdr+denoise/srgb_part.png) | ![](../../Docs/Images/1124结果srgb/seq8/pipelinev4param/srgb_part.png) |
 
 ------
 
