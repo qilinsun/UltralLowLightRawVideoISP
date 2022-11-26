@@ -1,7 +1,7 @@
 
 ## 工作进程：
 
-### 2022.11.21-24
+### 2022.11.21-25
 
 + 调整了deblur和side window filtering的位置——pipeline v5，结果如下
 
@@ -57,6 +57,16 @@ enhanceRGB = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
 | Method |Original|Pipeline v1|Pipeline v2|Pipeline v3|Pipeline v4|
 | :----: | -------------------------------------------------------- | :------------------------------------------------------: | :------------------------------------------------------: | :------------------------------------------------------: | :------------------------------------------------------: |
 | Result | ![](../../Docs/Images/1124结果srgb/seq8_ori/srgb.png) | ![](../../Docs/Images/1124结果srgb/seq8/srgb_part.png) | ![](../../Docs/Images/1124结果srgb/seq8/pipeline2param1/srgb_part.png) | ![](../../Docs/Images/1124结果srgb/seq8/hdr+denoise/srgb_part.png) | ![](../../Docs/Images/1124结果srgb/seq8/pipelinev4param/srgb_part.png) |
+
++ 建立噪声模型
+
++ CRVD数据集是视频去噪的数据集且含有运动模糊，用该数据集来测试目前增加了deblur的方法，验证deblur的效果
+
+#### 问题
+
++ 使用Denoise会改变颜色，出现颜色上的偏差
+
++ 目前的噪声模型建立的是否正确
 
 ------
 
