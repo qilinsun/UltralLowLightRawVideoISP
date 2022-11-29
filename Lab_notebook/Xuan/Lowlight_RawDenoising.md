@@ -9,7 +9,7 @@
 
 | HDR+ | Maskdngan | Starlight | Deblur+HDR+ |
 | :--: | --------- | --------- | ----------- |
-|![](../../Docs/Images/1128对比结果/hdr+/减去黑电平_hdr+/srgb_part.png)|![](../../Docs/Images/1128对比结果/maskdngan_result/rawpy后处理结果/减去黑电平/frame3_denoised_sRGB.png)|![](../../Docs/Images/1128对比结果/hrnet_starlight/减去黑电平/denoise_raw.png)|![](../../Docs/Images/1128对比结果/estrnn_deblur_hdr+/减去黑电平_pipelinev2/srgb_part.png)|
+|![](../../Docs/Images/1128对比结果/hdr+/减去黑电平_hdr+/srgb_part.png)|![](../../Docs/Images/1128对比结果/maskdngan_result/rawpy后处理结果/减去黑电平/frame3_denoised_sRGB.png)|![](../../Docs/Images/1128对比结果/hrnet_starlight/1129starlight原本结果/减去黑电平/denoise_raw.png)|![](../../Docs/Images/1128对比结果/estrnn_deblur_hdr+/减去黑电平_pipelinev2/srgb_part.png)|
 
 + 在ISO 2500, F2.8, 曝光时间1/30的条件下，拍摄了两组灰阶卡照片，一组是低光照，一组是高光照。因为imatest软件的文档说，一般情况下是符合高斯分布，但是在低光情况下是更符合泊松分布，因
 此拍摄两组照片，通过分析得到高斯和泊松分布的参数
