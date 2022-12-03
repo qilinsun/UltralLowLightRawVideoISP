@@ -1,0 +1,222 @@
+%\documentclass[acmtog]{acmart}
+\documentclass[acmtog,anonymous,timestamp,review]{acmart} 
+\usepackage{booktabs} % For formal tables
+\usepackage[british]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{babelbib}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{calc}
+\usepackage{floatflt}
+\usepackage{amssymb, amsthm}
+\usepackage{amsmath}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{array}
+
+\usepackage{xcolor}
+\usepackage{bm}
+\usepackage[normalem]{ulem}
+
+\usepackage{stmaryrd}
+\usepackage{stackrel}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{rotating}
+
+\usepackage{mwe,tikz}
+\usepackage[percent]{overpic}
+\usepackage{float}
+
+\usepackage{pgfplots,pgfplotstable}
+
+% Format source code
+\usepackage{listings}
+\usepackage{bm}
+\usepackage{leftidx}
+
+\usepackage[T1]{fontenc}
+\usepackage{babel}
+\usepackage[font=small,labelfont=bf,tableposition=top]{caption}
+\usepackage{booktabs}
+\usepackage{threeparttable}
+\usepackage{multirow}
+% graphics
+\graphicspath{{figures/}{figures/}}
+
+%{undoign silly float defaults}
+\renewcommand{\topfraction}{0.8}	% max fraction of floats at top
+\renewcommand{\bottomfraction}{0.8}	% max fraction of floats at bottom
+\renewcommand{\dbltopfraction}{0.8}	% fit big float above 2-col. text
+\renewcommand{\textfraction}{0.1}	% allow minimal text w. figs
+
+\renewcommand{\floatpagefraction}{0.7}	% require fuller float pages
+\renewcommand{\dblfloatpagefraction}{0.7}	% require fuller float pages
+
+%Colors and plot structures
+\newlength{\nbw}
+\newcommand{\todelete}[1]{{\textcolor{red}{delete: #1}}}
+\newcommand{\pc}[1]{\color{green}{#1}}
+\newcommand{\nc}[1]{\color{red}{#1}}
+\newcommand{\iname}{}
+\newcommand{\sunq}{\color{blue}}
+\newcommand{\changed}[1]{{\textcolor{orange}{#1}}}
+
+\newcommand{\todo}[1]{{\textcolor{red}{TODO: #1}}}
+
+
+\acmPrice{15.00}
+
+% The next eight lines come directly from the completed rights form.
+% You MUST replace them with the lines specific to your accepted work.
+\setcopyright{acmlicensed}
+\acmJournal{TOG}
+\acmYear{2019}
+\acmVolume{0}
+\acmNumber{0}
+\acmArticle{0}
+\acmMonth{11}
+\acmDOI{http://dx.doi.org/10.1145/8888888.7777777}
+
+% Use the "authoryear" citation style, and make sure citations are in [square brackets].
+\citestyle{acmauthoryear}
+\setcitestyle{square}
+
+% A useful command for controlling the number of authors per row.
+% The default value of "authorsperrow" is 2.
+\settopmatter{authorsperrow=4}
+
+% end of preamble.
+
+\begin{document}
+
+% Title. 
+% If your title is long, consider \title[short title]{full title} - "short title" will be used for running heads.
+\title{End-to-End Complex Lens Group Design with Differentiable Ray Tracing}
+
+% Authors.
+\author{Qilin Sun}
+\affiliation{%
+  \department{Visual Computing Center}
+  \institution{King Abudullah University of Science and Technology}}
+\email{qilin.sun@kaust.edu.sa}
+
+\author{Congli Wang(order dissuced by themself)}
+\affiliation{%
+  \department{Visual Computing Center}
+  \institution{King Abudullah University of Science and Technology}}
+\email{congli.wang@kaust.edu.sa}
+
+\author{Qiang Fu(order dissuced by themself)}
+\affiliation{%
+  \department{Visual Computing Center}
+  \institution{King Abudullah University of Science and Technology}}
+\email{qiang.fu@kaust.edu.sa}
+
+\author{Xiong Dun(order dissuced by themself)}
+\affiliation{%
+  \department{Visual Computing Center}
+  \institution{King Abudullah University of Science and Technology}}
+\email{xiong.dun@kaust.edu.sa}
+
+\author{Wolfgang Heidrich}
+\affiliation{%
+  \department{Visual Computing Center}
+  \institution{King Abudullah University of Science and Technology}}
+
+% This command defines the author string for running heads.
+\renewcommand{\shortauthors}{Qilin Sun, Congli Wang, Qiang Fu, Xiong Dun ,Wolfgang Heidrich}
+\authorsaddresses{}
+% abstract
+\begin{abstract}
+  
+  Typical computational camera optics are usually manually designed for a specific 
+  task and then combined with the correction work to post-capture possing. Recent 
+  joint or end-to-end camera design still based on a separated design or using a 
+  simple Fourier transform approximation and a single element.   
+  
+  
+  However, limited by the designing freedom and overly approximation, the final 
+  reconstructed image quality and robustness are still not good enough to step out
+  of laboratory.
+  
+  
+  In this paper, we propose an end-to-end designing architecture that jointly 
+  optimizes a fully differentiable complex lens group with the reconstruction 
+  algorithm. 
+  Specifically, we build a differentiable complex lens representation based on 
+  the differentiable ray-tracing rendering engine which enables directly 
+  rendering intermediate images with aberrations of all kinds. 
+  Skipping the PSFs, which vary across the field-of-view and depth, we 
+  can now send the corrupted simulation into the reconstruction network 
+  and correct the aberration described precisely.
+  With a greater designing freedom and connection with the deep network, the 
+  lens parameters and reconstruction can be directly optimized jointly 
+  in the pipeline.
+  
+  
+  We access the proposed method and its applications like extending
+  depth-depth-of-field in both simulation and experimentally with a prototype camera
+  system. The fully differentiable complex lens group can be a latent choice to replace
+  Zemax and bring the optical engineering into a new epoch.
+  
+  
+\end{abstract}
+
+%CCS
+\begin{CCSXML}
+<ccs2012>
+   <concept>
+       <concept_id>10010147.10010371.10010372.10010374</concept_id>
+       <concept_desc>Computing methodologies~Ray tracing</concept_desc>
+       <concept_significance>500</concept_significance>
+       </concept>
+   <concept>
+       <concept_id>10010147.10010178.10010224.10010226.10010236</concept_id>
+       <concept_desc>Computing methodologies~Computational photography</concept_desc>
+       <concept_significance>500</concept_significance>
+       </concept>
+ </ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Computing methodologies~Ray tracing}
+\ccsdesc[500]{Computing methodologies~Computational photography}
+
+%keywords
+\keywords{Complex lens, Differentiable, Raytracing, End-to-end}
+
+% A "teaser" figure, centered below the title and authors and above the body of the work.
+\begin{teaserfigure}
+  \centering
+    \includegraphics[width=1.0\textwidth]{figures/TeaserFigure.pdf}
+    \vspace{-18pt}
+  \caption{Overview of our 
+\label{fig:teaser}}
+\end{teaserfigure}
+
+% Processes all of the front-end information and starts the body of the work.
+\maketitle
+\input{Introduction}
+
+\input{LensModel}
+%%
+%\input{Evaluation}
+%%
+%\input{Implementation}
+%
+%\input{Conclusion}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{reference}
+\end{document}
+
+
+
+% --- DO NOT DELETE ---
+% Local Variables:
+% mode: latex
+% mode: flyspell
+% mode: TeX-PDF
+% End:
+

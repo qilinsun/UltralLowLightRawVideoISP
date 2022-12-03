@@ -3,3 +3,8 @@ Docs/Images/Merging/CRVD_merge_result/*
 Docs/Images/Merging/DCT_Spatial_Distance/*
 Docs/Images/Merging/DCT_Spatial_Distance_downsample/*
 Docs/Images/Merging/DRV_merge_result/*png
+*.log
+*.aux
+*.bbl
+*.blg
+*.out

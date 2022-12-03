@@ -1,0 +1,167 @@
+%% introduction & related work
+\section{Introduction}
+\label{sec:intro}
+ A camera, namely an optical instrument used to record images, was usually designed to acquire
+ a sharper, higher dynamic range and better color fidelity image. 
+ Therefore, in typical camera design, researchers take optical aberrations such as defocus, spherical  
+ aberration, coma, astigmatism, field curvature, and distortion as the criterion to design optics. 
+ As computing power grows, some optics designing software like Zemax and CodeV are developed to
+ optimize the aberrations of all kinds. 
+ However, this kind of design is mostly blindly pleasing human eyes but not the best for some
+ specific tasks. 
+ Facing a specific task, codesigning the optics and image processing~\cite{Sun2018Depth} even 
+ end-to-end designings~\cite{Sun2020LearningRank1HDR} have emerged over the last two decades. 
+
+
+ To date, codesiging of optics and the post-processing algorithm have achieved many new image 
+ posiblities such as  depth estimation~\cite{Chang_2019_ICCV} large field-of-view 
+ imaging~\cite{Peng_Sun2019LearnLargeFOV}, extended depth-of-field~\cite{chang2019deep}, optimal
+ sampling~\cite{Sun2020EndSpad} and high dynamic range (HDR) 
+ imaging~\cite{Sun2020LearningRank1HDR, Metzler_2020_CVPR}. 
+ However, all those approaches are just variants of PSF engineering and very limited.
+ First, for those diffractive based methods, the differentiable model is based on 
+ paraximal approximation and simplified to a simple Fourier Transformation. The 
+ small field-of-view, huge variable map, and difficult fabrication make the 
+ applications very limited, hard to find a stable global minimum and large 
+ scale application. 
+ Second, for those refractive based methods, the optics and post-processing are still 
+ optimized separately but not end-to-end. That means the optics is not optimal for
+ the post-processing and always rely on prior knowledge.
+ Last but not least, all those approaches fall to optimize the complex lens group like a
+ traditional lens design. 
+
+ In this work, we deviate from end-to-end design and traditional lens design goals and demonstrate 
+ high-quality, large depth-of-field (DOF) imaging using a complex lens group with aspherical surfaces, 
+ i.e., multiple lens surfaces which generate the best compromise for all depths connected with a 
+ deep reconstruction network. Specifically, we propose a differentiable optical model with multiple
+ elements and materials	which can be simply defined by a configuration file, a reconstruction deep
+ network tailored to this optical model, and a novel loss and learning strategy that makes the
+ end-to-end designing using our differentiable lens engine easier. 
+
+ The differentiable complex lens model brings a new way to optimize the optic of many different kind
+ of cameras. Combined with a tailored deep network, it makes it easier to recover high-quality images
+ from measurements degraded by severe aberrations. Instead of traditional lens design, which usually
+ taking point spread function (PSF) as a target, we are able to directly render the images with 
+ abberations of all kinds. That means we can optimize the complex lens model without considering the 
+ varying PSFs across the field of view and depths. In addition, beyond the goal of capturing a sharp
+ and clear image on the sensor, the proposed method offer a huge designing flexibility that can not only
+ find a compromision over optics and post-processing but also free the dimitions of optical encoding.
+ We demonstrate the proposed approach outperforms the state-of-the-art complex lens design (by Zemax)
+ in both simulation and experiment. We prototype our design camera with a complex lens by fabricating the
+ CNC machining system that supports point diamond tunning and demonstrate on a broad set of experimental 
+ in-the-wild captures. Our model is demonstrated more efficient in some given applications such as
+ extended DOF compared with traditional lens design. In addition, we also show that the proposed
+ differentiable complex lens model and end-to-end pipeline is effective in many other applications in
+ simulation.
+ 
+ Specifically, we make the following contributions:
+
+\vspace{-3pt}
+\begin{itemize}
+\item We introduce a novel differentiable complex lens model based on differentiable ray tracing, and this model can simulate aberrations of all kinds. We provide an easy define of initial optics design that allows user to define aspherical surface profile, radius, positions, materials and etc..
+
+\item We propose an end-to-end pipeline that can jointly optimize the lens model and the reconstruction network. With the reconstruction network and lose function which are tailored 
+to some applications like extended depth-of-field. 
+
+\item We validate the proposed approach in both simulations and on real-world measurements captured
+by our assembled and fabricated aspherical lens group and verify that the experimental results match 
+the simulations. 
+\vspace{3pt}
+
+\end{itemize}
+
+
+ 
+
+\section{Related Work}
+\label{sec:related_work}
+
+\paragraph{Optical Aberrations and Traditional Lens Design.}
+ The most common monocromatic abberations are defocus, spherical abberation, coma, astomatism, field
+ curvature and distortation, and the cromatic abberations are typically axial and laterial chromatic
+ abberation. Both of them are results of the differences of the optical path length when light travels
+ trough different regions of a lens at different incident angles~\cite{fowles2012introduction}. These
+ aberrations manifest themselves as unwanted blur which becomes more severe with increasing DOF~\cite{smith2005modern}. 
+ Conventional lens design aims at minimizing aberrations of all kinds
+by the tools like CODE V and ZEMAX who use . 
+This includes designing aspherical surfaces and introducing lens elements using materials 
+with different optical properties.
+
+State-of-the-art optical design software is a cornerstone tool for optimizing
+the surface profiles of refractive lens designs.
+However, while hyper-parameter optimization tools are becoming mature, the design process still relies on existing objectives, so-called merit functions, that find a compromise across a variety of criteria~\cite{malacara2016handbook,shih2012image}, trading off the point spread function (PSF) shape across sensor locations, lens configurations (e.g. zoom levels) and target wavelength band. 
+%Correcting all aberrations for a large FOV eventually results in a highly complex lens system.
+
+
+\paragraph{Computational Optics.}
+%
+A large body of work on computational imaging~\cite{dowski1995extended,stork2013lensless,stork2014optical,levin20094d} has proposed to design optics for aberration removal in post-processing. %Commonly, these approaches favor PSFs that maximize the preserved spatial-frequency spectrum in at least one color channel, such that a deconvolution method can recover the missing frequencies effectively. 
+These methods often favor diffractive optical elements (DOEs) over refractive optics~\cite{monjur2015ultra,antipa2018diffusercam,heide2016encoded,peng2016diffractive} because of their large design space. 
+Moreover, recent work proposed caustic (holographic) designs, for projection displays or imaging lenses~\cite{papas2012magic,schwartzburg2014high,peng2017mix}.
+To simplify the inverse problem in post-processing, all of the described approaches ignore off-axis aberrations by restricting the FOV to a few degrees -- {existing approaches do not realize monocular imaging with a large FOV}. 
+
+
+Several approaches to end-to-end optical imaging were recently proposed, where parametrized optics and image processing are jointly optimized for applications in extended depth of field and superresolution imaging~\cite{sitzmann2018end}, monocular depth estimation~\cite{Haim:2018,Wu:2019,chang2019deep}, and image classification~\cite{chang2018hybrid}. However, none of these approaches aim at large FOV imaging and all of them build on simple paraxial image formation models, which break for large fields of view. Moreover, they are limited to a single optical surface. We overcome these challenges by engineering PSFs over a large FOV, and, relying on existing optical design tools that support complex multi-surface/material designs, optimize for a well-motivated dual-mixture design tailored to deep reconstruction models.
+
+
+
+\paragraph{Manufacturing Planar Optics.}
+%\todo{I don't think this characterization is accurate -- modern mobile
+%camera lenses are all injection molded, which is the basically the
+%same effort as nano-imprinting. The real hurdle to commercial
+%adaptation is the software pipeline + chromatic aberration.}
+
+Various manufacturing methods exist that enable ``planar'' optics with low-depth optical surface, i.e. less than 1~mm. 
+Commercial miniature form factor optics like the lenses in smartphone cameras,
+can be manufactured using mature injection molding techniques~\cite{oliver2010imaging}.
+Alternative fabrication methods for thin-plate lenses include diffractive optics and metalenses~\cite{duoshu2011fabrication,genevet2017recent}, which require 
+nano-fabrication methods like photolithography and nano-imprinting~\cite{ahn2009large,chou1996nanoimprint}. The UV-cure replication technique~\cite{zoberbier2009wafer} can facilitate manufacturing wafer-scale optical elements.
+Note that creating a Fresnel lens with a clear aperture
+  diameter of 23.5~mm and a focal length of 43~mm requires, as in this work, a feature size
+  smaller than 300~nm, which is beyond the capability of the
+  photolithography methods used in many recent DOE works~\cite{heide2016encoded,peng2016diffractive,sitzmann2018end}.
+Freeform lenses with a larger aperture and continuous surfaces can be manufactured using diamond turning machining~\cite{fang2013manufacturing}. The continuous surface preserves light efficiency and works under broadband illumination, while the lenses are usually thick and bulky because of the local curvature constraints. 
+%As a result, the size, cost, and image quality of existing lenses can not compete with complex compound lens systems.
+
+In this work, we use high-precision diamond turning machining to prototype 
+the proposed lenses. Instead of fabricating a 
+freeform lens with continuous surface, e.g., as in~\cite{sitzmann2018end}, we wrap the optimized 
+surface profile using coarse wrap-around depth values instead of wavelength-scale wrapping in diffractive lens designs, see Fig.~\ref{fig:teaser}. This allows us to design a Fresnel-inspired free-form lens with the advantages of both refractive optics and 
+diffractive optics: we achieve a thin form factor while reducing chromatic aberrations.
+%\gw{I don't think the arguments in this paragraph are clear. The fabrication part is not really a contribution of this work anyway, so why not omit this whole paragraph out and just list some of these implementation details in the implementation section later? }
+%\fh{adjusted now, hope this makes sense. I think it's a minor contribution, so agree that this could be moved to the prototype section.}
+
+\paragraph{Image Quality.}
+Imaging describes the signal chain of light being transported from a scene patch of interest to the camera, focusing in the camera optics, digitization of the focused photon flux on the sensor, and post-processing of the measured data. During each of these individual steps, information about the scene patches of interest may be lost or corrupted. Various hand-crafted image quality metrics exist that measure the cumulative error of this imaging process~\cite{wang2004image,mitra2014denoise}, with or without known ground-truth reference~\cite{mittal2012no}, or allow to individually characterize components of the imaging stack using calibration setups~\cite{estribeau2004fast,emva1288}. Typical performance metrics are the signal-to-noise ratio 
+(SNR)~\cite{parker2010algorithms} and modulation transfer function (MTF)~\cite{boreman2001modulation,estribeau2004fast}. While these metrics are widely reported and measurement setups are readily available, they are also not free from disadvantages due to their domain-agnostic design. For example, high SNR does not guarantee a perceptually pleasing image, which has sparked recent work on perceptual loss functions~\cite{johnson2016perceptual}. Moreover, SNR increases in the presence of glare and quantization, which can yield inconclusive results when used as a design metric~\cite{Geese_CDP}.
+
+We design the proposed optical system in conjunction with the learned image reconstruction methods. To this end, we analyze the behavior of the early layers in our generator, which relate to the response of local contrast features in the scene. Relying on a probabilistic measure~\cite{Geese_CDP}, we assess the ability to detect or miss such local features across the full FOV.  This insight allows us  to tailor the proposed lens design to our network-based reconstruction method. 
+ 
+
+\paragraph{End-to-end Optics Design.}
+Codesigning of optics and post-processing has demostrated superior performance over some specific tasks in color image restoration~\cite{Chakrabarti2016LearningSM, Peng_Sun2019LearnLargeFOV}, HDR imaging~\cite{Sun2020LearningRank1HDR, Metzler_2020_CVPR}, single image depth estimation~\cite{Chang_2019_ICCV，Haim2018DepthEF， zhang2018single， He2018LearningDF }, microscopy~\cite{Horstmeyer2017ConvolutionalNN, kellman2019data, Nehme2019DenseTD, Shechtman2016MulticolourLM}， and spad camera~\cite{Sun2020EndSpad}.
+
+We propose the differentiable complex lens model and embeded it to an end-to-end optimization pipeline.
+
+Unfortunately, the lens design proposed in this work produces large PSFs that present a challenge to existing deconvolution methods which suffer in image quality for large aberrations, necessitating a custom image reconstruction approach.  Note that computationally efficient forward models for large spatially-varying convolutions have been investigated before~\cite{gilad2006fast}.
+
+Over the last years, a large body of work proposed data-driven approaches for image processing tasks~\cite{Schuler_2013_CVPR,xu2014deep,
+zhang132017learning}. Specifically addressing deconvolution, Nah et al.~\cite{nah2017deep} propose a fully connected convolutional network that iteratively 
+deconvolves in a multi-stage approach. More recently, generative adversarial networks 
+(GANs) have been shown to provide generative estimates with high image quality.
+Kupyn \textit{et al.}~\cite{kupyn2017deblurgan} demonstrate the 
+practicability of applying GAN reconstruction methods to deblurring problems.
+
+
+All of these approaches have in common that they require either accurate PSF calibration or large training data that has been manually acquired. In contrast, we propose a lab capture process to generate a large training corpus with the PSF encoded in the captured data. Note that the large aberrations make training on very small image patches prohibitive. The proposed automated acquisition approach allows for supervised training on a very large training set of full-sized images, which are needed to encode large scene-dependent blur. The training approach, together with the proposed model and loss function, allows us to tackle the large scene-dependent blur, color shift and contrast loss of our thin-plate lens design. 
+
+
+  
+
+% --- DO NOT DELETE ---
+% Local Variables:
+% mode: latex
+% mode: flyspell
+% mode: TeX-PDF
+% End:
+
