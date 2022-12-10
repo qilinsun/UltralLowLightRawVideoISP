@@ -1,11 +1,27 @@
 
 ## 工作进程：
 
-### 12.6
+### 12.6-10
 
 + vevid方法的复现
 
 + 调整预去噪网络
+
++ 根据handheld方法调整部分pipeline
+
+#### 实验结果
+
++ 加入vived的结果
+
+| Vevid+HDR+ | Denoising+Vevid+HDR+ | Vevid+Deblur+HDR+ | Denoising+Vevid+Deblur+HDR+ |
+| :--: | --------- | --------- | ----------- |
+|![](../../Docs/Images/1210results/hdr+vevid_simple_g0.6_b_0.5/srgb_part.png)|![](../../Docs/Images/1210results/denoising+vevid+hdr/srgb_part.png)|![](../../Docs/Images/1210results/vevid+pipelinev2/srgb_part.png)|![](../../Docs/Images/1210results/denoising+vevid+deblur+hdr/srgb_part.png)|
+
++ 对比试验
+
+| HDR+ | Maskdngan | Starlight | Denoise+vevid+Deblur+HDR+ |
+| :--: | --------- | --------- | ----------- |
+|![](../../Docs/Images/1128对比结果/hdr+/减去黑电平_hdr+/srgb_part.png)|![](../../Docs/Images/1128对比结果/maskdngan_result/rawpy后处理结果/减去黑电平/frame3_denoised_sRGB.png)|![](../../Docs/Images/1128对比结果/hrnet_starlight/1129starlight原本结果/减去黑电平/denoise_raw.png)|![](../../Docs/Images/1210results/denoising+vevid+deblur+hdr/srgb_part.png)|
 
 ### 11.28-12.2
 
@@ -18,13 +34,13 @@
 |![](../../Docs/Images/1128对比结果/hdr+/减去黑电平_hdr+/srgb_part.png)|![](../../Docs/Images/1128对比结果/maskdngan_result/rawpy后处理结果/减去黑电平/frame3_denoised_sRGB.png)|![](../../Docs/Images/1128对比结果/hrnet_starlight/1129starlight原本结果/减去黑电平/denoise_raw.png)|![](../../Docs/Images/1128对比结果/estrnn_deblur_hdr+/减去黑电平_pipelinev2/srgb_part.png)|
 
 + 在ISO 2500, F2.8, 曝光时间1/30的条件下，拍摄了两组灰阶卡照片，一组是低光照，一组是高光照。因为imatest软件的文档说，一般情况下是符合高斯分布，但是在低光情况下是更符合泊松分布，因
-此拍摄两组照片，通过分析得到高斯和泊松分布的参数，分析过程和结果见[文件](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/Docs/Images/1128%E5%99%AA%E5%A3%B0%E5%BB%BA%E6%A8%A1%E7%BB%93%E6%9E%9C/noise.pdf)，低光照下的估计噪声为0.008，高照度下的估计噪声为0.009
+此拍摄两组照片，通过分析得到高斯和泊松分布的参数，分析过程和结果见[文件](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/Docs/Images/1128%E5%99%AA%E5%A3%B0%E5%BB%BA%E6%A8%A1%E7%BB%93%E6%9E%9C/noise.pdf)，低光照下的估计噪声为0.0204，高照度下的估计噪声为0.02295
 
 + 研究Fixed pattern noise的分析
 
     + imatest软件没具体介绍fpn的估计，参考了网上的代码对fpn进行估计，[code](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/noise_model/Dark_fpn.py)，估计的噪声为9.936909
 
-+ 根据上面分析出的噪声，根据噪声模型𝒙_𝒑~ 𝝈_𝒔^𝟐 𝓟(𝒚_𝒑/𝝈_𝒔^𝟐) + 𝓟(𝑵_𝑭𝑷𝑵) + 𝓝(𝟎,𝝈_𝒓^𝟐)，[code](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/noise_model/generate_noise.py)，得出噪声图放入到神经网络中进行训练，结果没那么的好，有部分未恢复出来，且在整个pipeline代码运行时，部分patch里会有0，因此会在空间去噪时有问题，会出现除以0的情况，在这加了个1e-6，目前结果如下![](../../Docs/Images/1128对比结果/denoise_estrnn_hdr+/srgb_part.png)
++ 根据上面分析出的噪声，根据噪声模型𝒙_𝒑~ 𝝈_𝒔^𝟐 𝓟(𝒚_𝒑/𝝈_𝒔^𝟐) + 𝓟(𝑵_𝑭𝑷𝑵) + 𝓝(𝟎,𝝈_𝒓^𝟐)，[code](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/noise_model/generate_noise.py)，得出噪声图放入到神经网络中进行训练，结果没那么的好，有部分未恢复出来，且在整个pipeline代码运行时，部分patch里会有0，因此会在空间去噪时有问题，会出现除以0的情况，在这加了个1e-6，目前结果如下![](../../Docs/Images/1210results/denoising+deblur+hdr/srgb_part.png)
 
 + Raw video的处理，ffmpeg方法抽帧不能输出成raw格式，只能输出rgb格式
 
