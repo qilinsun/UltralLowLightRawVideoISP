@@ -11,9 +11,15 @@
 
 #### 实验结果
 
++ pipeline之间的对比结果
+
+|      HDR+      |   Denoising+HDR+  |   Deblur+HDR+   | Denoising+Deblur+HDR+ |
+| :--: | --------- | --------- | ----------- |
+|![](../../Docs/Images/1128对比结果/hdr+/减去黑电平_hdr+/srgb_part.png)|![](../../Docs/Images/1210results/denoising+hdr/srgb_part.png)|![](../../Docs/Images/1128对比结果/estrnn_deblur_hdr+/减去黑电平_pipelinev2/srgb_part.png)|![](../../Docs/Images/1210results/denoising+deblur+hdr/srgb_part.png)|
+
 + 加入vived的结果
 
-| Vevid+HDR+ | Denoising+Vevid+HDR+ | Vevid+Deblur+HDR+ | Denoising+Vevid+Deblur+HDR+ |
+|      Vevid+HDR+      |   Denoising+Vevid+HDR+  |   Vevid+Deblur+HDR+   | Denoising+Vevid+Deblur+HDR+ |
 | :--: | --------- | --------- | ----------- |
 |![](../../Docs/Images/1210results/hdr+vevid_simple_g0.6_b_0.5/srgb_part.png)|![](../../Docs/Images/1210results/denoising+vevid+hdr/srgb_part.png)|![](../../Docs/Images/1210results/vevid+pipelinev2/srgb_part.png)|![](../../Docs/Images/1210results/denoising+vevid+deblur+hdr/srgb_part.png)|
 
