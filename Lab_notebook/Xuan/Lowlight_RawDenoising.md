@@ -1,7 +1,7 @@
 
 ## 工作进程：
 
-### 12.11-14
+### 12.11-17
 
 + 重新拍摄了灰阶卡的图片，依然分别在低照度和高照度下进行了噪声估计，得到RMS噪声，此值为标准差，即可推出方差。
 
@@ -11,7 +11,9 @@
     
     + 问题：会存在合并错误的地方。**增加了对齐和合并阶段的图像数量，可以解决一些合并中的问题**
 
-实验结果及其他方法的对比结果见[文件](https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/Docs/Images/17_1215%E7%BB%93%E6%9E%9C)
++ 校正白平衡
+
+实验结果及其他方法的对比结果见[文件](https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/Docs/Images/12.17结果)
 
 ------
 
