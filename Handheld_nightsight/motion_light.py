@@ -5,38 +5,11 @@ import cv2
 from einops import rearrange,repeat
 from scipy import signal
 
-def Sobel(img,filter1,filter2):
-    h,w=img.shape[:2]
-    new_img=np.zeros((h+2,w+2),np.float32)
-    new_img[1:h+1,1:w+1]=img#填充
-    out=[]
-    for i in range(1,h+1):
-        for j in range(1,w+1):
-            dx=np.sum(np.multiply(new_img[i-1:i+2,j-1:j+2],filter1))
-            dy=np.sum(np.multiply(new_img[i-1:i+2,j-1:j+2],filter2))
-            out.append(
-                np.clip(int(np.sqrt(dx**2+dy**2)),0,1)
-            )
-    out=np.array(out).reshape(h,w)
-    return out
-
-
 def image_interpolation(img,new_dimension,inter_method):
     inter_img = cv2.resize(img,new_dimension,interpolation=inter_method)
     return inter_img
 
 def esti_motion(raw_img1, raw_img2, K):
-    filter1 = np.array([
-        [-1, 0, 1],
-        [-2, 0, 2],
-        [-1, 0, 1]
-    ])
-    filter2 = np.array([
-        [-1, -2, -1],
-        [0, 0, 0],
-        [1, 2, 1]
-    ])
-
     kernel_x = np.array([[-1., 1.], [-1., 1.]])
     kernel_y = np.array([[-1., -1.], [1., 1.]])
     kernel_t = np.array([[1., 1.], [1., 1.]]) #*.25
@@ -56,8 +29,7 @@ def esti_motion(raw_img1, raw_img2, K):
     gradient_intensity = signal.convolve2d(down_raw2, kernel_t, boundary='symm', mode=mode) + signal.convolve2d(down_raw1, -kernel_t,
                                                                                           boundary='symm', mode=mode)
 
-    # gradient_raw1 = Sobel(down_raw1, filter1, filter2)
-    # gradient_intensity = Sobel(intensity, filter1, filter2)
+    intensity = Sobel(intensity, filter1, filter2)
     intensgradient_raw1_norm = np.abs(gradient_raw1)
     RMS_patch = down_raw1.reshape(64, 64, 16, 16)
     RMS = patchesRMS(RMS_patch)
