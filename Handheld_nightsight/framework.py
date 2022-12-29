@@ -24,9 +24,8 @@ def predict_GMM(dataMat, components=3, tol= 0.001, iter = 10,cov_type="full"):
     clst = mixture.GaussianMixture(n_components=components, tol=tol, max_iter=iter,covariance_type=cov_type)
     clst.fit(dataMat)
     # predicted_labels =clst.predict(dataMat)
-    # predict_pro = clst.predict_proba(dataMat)
-    predict_samp = clst.sample(4)
-    return predict_samp[0]
+    predict_pro = clst.predict_proba(dataMat)
+    return predict_pro
 
 
 def pack_raw(raw):
@@ -75,9 +74,6 @@ input_seq = load_video_seq(raw_path, seq_id, star_id, num_load)
 for i in range(input_seq.shape[0]-2):
     motion = esti_motion(input_seq[i], input_seq[i+1], K=4)
     motion_list.append(motion*255)
-    # motion_vector = lucas_kanade(input_seq[i]/16383, input_seq[i + 1]/16383)
-    # motion = motion_vector[0] ** 2 + motion_vector[1] ** 2
-    # motion_list.append(motion*255)
     # # 中心加权平均
     weight_map = gaussian_kernel(kernel_size=1024, sigma=300)
     motion_weight = np.mean(motion/255*16383*weight_map)
