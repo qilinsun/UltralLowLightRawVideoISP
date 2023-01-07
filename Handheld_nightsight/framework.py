@@ -23,9 +23,24 @@ def vevid_simple(rawimg, G, bais):
 def predict_GMM(dataMat, components=3, tol= 0.001, iter = 10,cov_type="full"):
     clst = mixture.GaussianMixture(n_components=components, tol=tol, max_iter=iter,covariance_type=cov_type)
     clst.fit(dataMat)
-    # predicted_labels =clst.predict(dataMat)
-    predict_pro = clst.predict_proba(dataMat)
-    return predict_pro
+    predict_samp = clst.sample(4)
+    mean = clst.means_
+    variance = clst.covariances_
+    
+    return mean, variance, predict_samp
+
+def biSection(a, b, threshold, f):
+    iter = 0
+    while a < b:
+        mid = a + abs(b-a)/2.0
+        if abs(f(mid)) > threshold:
+            return mid
+        if f(mid) * f(b) < 0:
+            a = mid
+        if f(a) * f(mid) < 0:
+            b = mid
+
+        iter += 1
 
 
 def pack_raw(raw):
@@ -75,13 +90,24 @@ for i in range(input_seq.shape[0]-2):
     motion = esti_motion(input_seq[i], input_seq[i+1], K=4)
     motion_list.append(motion*255)
     # # 中心加权平均
-    weight_map = gaussian_kernel(kernel_size=1024, sigma=300)
-    motion_weight = np.mean(motion/255*16383*weight_map)
+    weight_map = gaussian_kernel(kernel_size=512, sigma=120)
+    motion_weight = np.mean(motion*16383*weight_map)
     motion_avers.append(motion_weight)
 
 # fit a three-cluster GMM for before weighted average
-# motion_array = (np.array(motion_avers)).reshape(-1, 1)
-# pred_motion_min = predict_GMM(motion_array, components=3, tol= 0.001, iter = 100, cov_type="full")
+motion_array = (np.array(motion_avers)).reshape(-1, 1)
+mean, variance, predict_sample = predict_GMM(motion_array, components=3, tol= 0.001, iter = 100, cov_type="full")
+vkmin = np.min(predict_sample[0])
+vkmin_index = np.argmin(predict_sample[0])
+vkmin_label = predict_sample[1][vkmin_index]
+
+# estiamte frames to fuse
+inter_val = np.sqrt(variance[vkmin_label]) * vkmin
+lower = mean[vkmin_label] - inter_val
+upper = mean[vkmin_label] + inter_val
+vmin = biSection(lower, upper,  0.8, lambda x: 1-(scipy.stats.norm.pdf(x, loc=0, scale=1)**(vkmin_index+1)))
+fusion_num = int(6 / (5/vmin))
+
 out_path = '/home/cuhksz-aci-03/Desktop/handheld/output/'
 filename = f"SEQ{seq_id}_motion_refine.mp4"
 WriteVideoGear(motion_list, out_path, filename, gamma=True, normalize=True, fps=15)
