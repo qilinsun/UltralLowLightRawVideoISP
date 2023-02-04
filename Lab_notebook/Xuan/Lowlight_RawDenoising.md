@@ -6,6 +6,7 @@
 + 尝试了Meshflow的方法，测试了几个rgb视频，效果不错，这个代码可用。
 + Meshflow分为两步，把这两步的结果都做了一次输出。然后将raw图像应用到这个代码中，第一步中有些图像帧可以，有些不行，但是能够有显示正确的图像通过第二步平滑后后不能实现了。
     + 第一步的结果
+    
     frame6     
 ![](../../Docs/Images/Meshflow_result/stabilized_frame_6.png)
     frame7 
