@@ -1,6 +1,17 @@
 
 ## 工作进程：
 
+### 2023.2.4
+
++ 尝试了Meshflow的方法，测试了几个rgb视频，效果不错，这个代码可用。
++ Meshflow分为两步，把这两步的结果都做了一次输出。然后将raw图像应用到这个代码中，第一步中有些图像帧可以，有些不行，但是能够有显示正确的图像通过第二步平滑后后不能实现了。
+    + 第一步的结果
+| frame6 | frame7 | frame8 | frame9 |
+| :--: | --------- | --------- | ----------- |
+|![](../../Docs/Images/Meshflow_result/stabilized_frame_6.png)|![](../../Docs/Images/Meshflow_result/stabilized_frame_7.png)|![](../../Docs/Images/Meshflow_result/stabilized_frame_8.png)|![](../../Docs/Images/Meshflow_result/stabilized_frame_9.png)|
++ 继续调研了几个方法，PatchMatch: A Randomized Correspondence Algorithm for Structural Image Editing，The Generalized PatchMatch Correspondence Algorithm，Collaborative Filtering of Correlated Noise: Exact Transform-Domain Variance for Improved Shrinkage and Patch Matching，目前在理这些方法的代码
+
+
 ### 2023.1.3
 
 + pipeline
