@@ -5,6 +5,7 @@
 
 + 测试了PatchMatch: A Randomized Correspondence Algorithm for Structural Image Editing，该方法可以较好的重建出相应的图像，然后放入到了Pipeline中进行实验
 + 实验结果
+
 **只有匹配和合并去噪的方法**
 ![](../../Docs/Images/17_patchmatch/full_0.png)
 **加入deblur的结果**
