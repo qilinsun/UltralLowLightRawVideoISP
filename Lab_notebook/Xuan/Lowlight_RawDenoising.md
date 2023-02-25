@@ -1,6 +1,18 @@
 
 ## 工作进程：
 
+### 2023.2.25组会总结
+
++ Deblur的位置需要更换
+
++ 加一个当前帧自相似的块匹配，只需要局部分范围即可
+
++ 现在的Pipeline
+
+![](../../Docs/Images/0225_pipeline.png)
+
+------
+
 ### 2023.2.19-2.24
 
 + 修改了RGB三个通道的顺序，重新弄了结果
@@ -19,6 +31,8 @@
 
 ![](../../Docs/Images/协同滤波/full_2.png)
 
+------
+
 ### 2023.2.11-2.17
 
 + 从Patchmatch的结果看，这个匹配的效果是可以的
@@ -26,6 +40,8 @@
 + 从目前的结果看是不是因为噪声太强，只是用多帧融合去噪的方式不能完全去噪，是否需要加进其他的去噪方式？
     + 先在预去噪的部分加了side window filter方法，效果不明显
     + 然后在搞噪声标定，重新建模噪声，训练网络，放进去看结果
+
+------
 
 ### 2023.2.5-2.10
 
@@ -56,6 +72,7 @@
 ![](../../Docs/Images/Meshflow_result/stabilized_frame_9.png)
 + 继续调研了几个方法，PatchMatch: A Randomized Correspondence Algorithm for Structural Image Editing，The Generalized PatchMatch Correspondence Algorithm，Collaborative Filtering of Correlated Noise: Exact Transform-Domain Variance for Improved Shrinkage and Patch Matching，目前在理这些方法的代码
 
+------
 
 ### 2023.1.3
 
