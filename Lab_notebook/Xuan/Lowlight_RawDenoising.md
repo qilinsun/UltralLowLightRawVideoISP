@@ -1,15 +1,29 @@
 
 ## 工作进程：
 
+### 2023.2.27-3.3
+
++ 现在的Pipeline
+
+![](../../Docs/Images/pipeline_0302_v1.png)
+
++ 增加了BM3D中寻找自相似的方法，用增强图和原图去做
+
+![](../../Docs/Images/结果_0302/patchmatch_0228/full_2.png)
+
++ 整理了一下HDR+, Maskdngan, Hrnet在拍摄数据上的实验结果
+
+![](../../Docs/Images/结果_0302/对比1.png)
+
+![](../../Docs/Images/结果_0302/对比2.png)
+
+------
+
 ### 2023.2.25组会总结
 
 + Deblur的位置需要更换
 
 + 加一个当前帧自相似的块匹配，只需要局部分范围即可
-
-+ 现在的Pipeline
-
-![](../../Docs/Images/0225_pipeline.png)
 
 ------
 
