@@ -22,14 +22,8 @@ from Utility.utils import ARPS_search_frame,MotionVectorClass, readTIFF,normaliz
                             readARW,TiffFastISP,ARWFastISP,ARWRawpyISP,writerVideo,getTime,weightedSAD
 import torch
 from torch.utils.data import Dataset
-
-from einops import rearrange, reduce, repeat
-from para import Parameter
-from data.utils import normalize, normalize_reverse
-from argparse import ArgumentParser
-from model import Model
-from network.Sim_Unet import Denoise_fpn
-from Utility.SideWindowFilter import SideWindowFilter
+from .numba_PM_v2 import NNS, reconstruction
+from .bm3d_denoise import Step2_fast_match, Locate_blk, Step2_3DFiltering
 
 
 verbose = 0
@@ -540,101 +534,76 @@ class LLR2V(torch.nn.Module):
         #referenceImg = singleBurst[0,:,:] # [h,w] 
         #alternateImgs = singleBurst[1:,:,:] # [bs-1,h,w]
         
-        # denoising
-        for burst_num in range(singleBurst.shape[0]):
-          # convert 
-          merge_h, merge_w = singleBurst[burst_num].shape
-          mergedImage_exp = np.expand_dims(singleBurst[burst_num], axis=0)
-          merge_rggb = np.concatenate((mergedImage_exp[:, 0:merge_h:2, 0:merge_w:2], # R
-                                      mergedImage_exp[:, 0:merge_h:2, 1:merge_w:2], # G
-                                      mergedImage_exp[:, 1:merge_h:2, 1:merge_w:2], # B
-                                      mergedImage_exp[:, 1:merge_h:2, 0:merge_w:2]), axis=0) # G
+        ref_image = singleBurst[0]
+        enhance_ref = vevid_simple(singleBurst[0] / 16383, G=0.5, bais=0.6)
+        enhance_ref = ((enhance_ref - enhance_ref.min()) / (enhance_ref.max() - enhance_ref.min())) * 16383.
 
-          # SideWindowFilter Denoise
-           rggb_expand = np.expand_dims(np.float32(merge_rggb), axis=0)
-           rggb_expand_torch = torch.tensor(rggb_expand, dtype=torch.float32, device='cuda')
-           sidewindow = SideWindowFilter(radius=3, iteration=1)
-           merge_rggb_out = sidewindow.forward(rggb_expand_torch)
-           merge_rggb_cpu = (merge_rggb_out.squeeze()).detach().cpu().numpy()
-           merge_rggb_cpu = merge_rggb_cpu.transpose(1, 2, 0)
-           merge_img = np.clip(np.float32(merge_rggb_cpu), 0, self.whiteLevel)
-          
-           # deep denoiser
-           # Step 1: load model
-           model_unet = Denoise_fpn()
-           model_unet = model_unet.cuda()
-           model_unet_path = '/home/cuhksz-aci-03/Documents/pytorch-Learning-to-See-in-the-Dark-master/saved_model/checkpoint_sony_e0900.pth'
-           model_unet.load_state_dict(torch.load(model_unet_path))
-           # Step 2: unet
-           model_unet.eval()
-           merge_exp = np.expand_dims(np.float32(merge_rggb), axis=0)
-           merge_rggb_torch = torch.from_numpy(merge_exp).float().cuda()
-           merge_rggb_out = model_unet(merge_rggb_torch)
-           merge_rggb_cpu = (merge_rggb_out.squeeze()).detach().cpu().numpy()
-           merge_rggb_cpu = merge_rggb_cpu.transpose(1, 2, 0)
-           # Step 3: clip
-           merge_img = np.clip(merge_rggb_cpu, 0, self.whiteLevel)
+        p_size = 3
+        itr = 1
+        img_match = []
+        enhanceimg_patch = []
 
-           # convert 
-           H, W, C = merge_img.shape
-           mergimg = np.empty([H * 2, W * 2])
-           mergimg[::2, ::2] = merge_img[..., 0]  # R
-           mergimg[::2, 1::2] = merge_img[..., 1]  # G
-           mergimg[1::2, ::2] = merge_img[..., 3]  # G
-           mergimg[1::2, 1::2] = merge_img[..., 2]  # B
-          
-           singleBurst[burst_num, ...] = mergimg
-       
-       # ESTRNN deblur
-       # set parameters
-       parser = ArgumentParser()
-       parser.add_argument('--ckpt', type=str, required=True, default='/home/cuhksz-aci-03/Documents/ESTRNN-master/checkpoints/model_best.pth.tar', help="the path of checkpoint of pretrained model")
-       args = parser.parse_args()
+        deblurimage = singleBurst[0:16, :, :]
+        for i in range(deblurimage.shape[0] - 1):
+            img_ori = deblurimage[0]
+            img = vevid_simple(img_ori / 16383, G=0.5, bais=0.6)
+            img = ((img - img.min()) / (img.max() - img.min())) * 16383.
+            ref_ori = deblurimage[i + 1]
+            ref = vevid_simple(ref_ori / 16383, G=0.5, bais=0.6)
+            ref = ((ref - ref.min()) / (ref.max() - ref.min())) * 16383.
+            f, dist, score_list = NNS(img, ref, p_size, itr)
+            img_recon = reconstruction(f, img_ori, ref_ori)
+            img_match.append(img_recon)
+            enhanceimg_recon = reconstruction(f, img, ref)
+            enhanceimg_patch.append(enhanceimg_recon)
 
-       # load model
-       para = Parameter().args
-       model = Model(para).cuda()
-       checkpoint_path = args.ckpt
-       checkpoint = torch.load(checkpoint_path, map_location=lambda storage, loc: storage.cuda())
-       model = nn.DataParallel(model)
-       model.load_state_dict(checkpoint['state_dict'])
+        img_match_array = np.array(img_match)
+        enhanceimg_patch_array = np.array(enhanceimg_patch)
 
-       seq_length = len(singleBurst)
-       if para.test_frames > seq_length:
-           para.test_frames = seq_length
-       input_seq = []
-       val_range = 2**16-1
-       start = 0
-       end = len(singleBurst)
-       # load data
-       for i in range(len(singleBurst)):
-           blur_img = singleBurst[i][np.newaxis, ...]
-           input_seq.append(blur_img[np.newaxis, ...])
-       input_seq = np.concatenate(input_seq)[np.newaxis, :]
-       model.eval()
-       with torch.no_grad():
-           input_seq = normalize(torch.from_numpy(input_seq).float().cuda(), centralize=para.centralize,
-                                 normalize=para.normalize, val_range=val_range)
-           output_seq = model([input_seq, ])
-           if isinstance(output_seq, (list, tuple)):
-               output_seq = output_seq[0]
-           output_seq = output_seq.squeeze(dim=0)
+        referenceImg = ref_image
+        alternateImgs = img_match_array
 
-       for frame_idx in range(para.past_frames, end - start - para.future_frames):
-           deblur_img = output_seq[frame_idx - para.past_frames]
-           deblur_img = normalize_reverse(deblur_img, centralize=para.centralize, normalize=para.normalize,
-                                                val_range=val_range)
-           deblur_img = deblur_img.detach().cpu().numpy().squeeze()
-           deblur_img = np.clip(deblur_img, 0, val_range)
-           deblur_img = (deblur_img).astype(np.float32)
+        # 设定好所有和patch空间和MV空间
+        tileSize = 2*self.mbSize
+        refTiles = getTiles(referenceImg, tileSize, tileSize // 2)
+        alignedTiles = np.empty(((len(alternateImgs) + 1,) + refTiles.shape), dtype=refTiles.dtype)
+        alignedTiles[0] = refTiles
 
-           singleBurst[frame_idx, ...] = deblur_img
-          
-        referenceImg = singleBurst[2, :, :] 
-        alternateImgs = singleBurst[3:14, :, :]  
+        for i, alternateImage in enumerate(alternateImgs):
+            alignedTile = getTiles(alternateImage, tileSize, tileSize // 2)
+            alignedTiles[i + 1, ...] = alignedTile
+
+        enhance_referenceImg = enhance_ref
+        enhance_alternateImgs = enhanceimg_patch_array
+
+        enhance_refTiles = getTiles(enhance_referenceImg, tileSize, tileSize // 2)
+        enhance_alignedTiles = np.empty(((len(enhance_alternateImgs) + 1,) + refTiles.shape), dtype=refTiles.dtype)
+        enhance_alignedTiles[0] = enhance_refTiles
+
+        for i, alternateImage in enumerate(enhance_alternateImgs):
+            enhance_alignedTile = getTiles(alternateImage, tileSize, tileSize // 2)
+            enhance_alignedTiles[i+1, ...] = enhance_alignedTile
+
+        Step2_Blk_Size = 40
+        Step2_Blk_Step = 20
+        (height, width) = ref_image.shape
+        block_Size = Step2_Blk_Size
+        blk_step = Step2_Blk_Step
+        Width_num = (width - block_Size) / blk_step
+        Height_num = (height - block_Size) / blk_step
+        for h in range(int(Height_num+1)):
+            for w in range(int(Width_num+1)):
+                m_blockpoint = Locate_blk(h, w, blk_step, block_Size, height, width)
+                Similar_Blks, Similar_Imgs, Positions, Count = Step2_fast_match(enhance_ref/16383.*255., ref_image/16383.*255., m_blockpoint)
+                sim_img = alignedTiles[:, h, w, ...] / 16383. * 255.
+                sim_enhanceimg = enhance_alignedTiles[:, h, w, ...] / 16383. * 255.
+                img_concat = np.concatenate([sim_img, Similar_Imgs], axis=0)
+                enhanceimg_concat = np.concatenate([sim_enhanceimg, Similar_Blks], axis=0)
+                simimg, wiener_weight = Step2_3DFiltering(enhanceimg_concat, img_concat)
+                alignedTiles[:, h, w, ...] = simimg[0:len(deblurimage), ...] / 255. * 16383.
         
         # Hdrplus pipeline
-        motionVectors, alignedTiles = alignHdrplus(referenceImg,alternateImgs,self.mbSize)
+        # motionVectors, alignedTiles = alignHdrplus(referenceImg,alternateImgs,self.mbSize)
         
         mergedImage = mergeHdrplus(referenceImg, alignedTiles, self.padding, 
                                    self.lambdaS, self.lambdaR, self.params, self.options)
@@ -650,7 +619,8 @@ class LLR2V(torch.nn.Module):
         hsvOperator = AutoGammaCorrection(hsv)
         enhanceV = hsvOperator.execute()*255.
         hsv[...,-1] = enhanceV
-        enhanceRGB = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB) 
+        enhanceRGB = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
+        enhanceRGB = cv2.cvtColor(enhanceRGB, cv2.COLOR_RGB2BGR)
         return enhanceRGB,mergedImage
 
     def visualize_diff(self,subplotH,subplotW,ifAssert,TsaveFshowNone,ifWrite):
