@@ -9,13 +9,18 @@
 
 |      Original      |      Step_1      |   Step_1(3/8)  |   Step_1+Step_2   | Step_1+Step_2(3/8) |
 | :--: | --------- | --------- | ----------- | ----------- |
-||||||
+|![](../../Docs/Images/0325结果/验证bm3d方法_自相似/Orignial.png)|![](../../Docs/Images/0325结果/验证bm3d方法_自相似/full_0_3_step1.png)|![](../../Docs/Images/0325结果/验证bm3d方法_自相似/full_0_3_3_8_step1.png)|![](../../Docs/Images/0325结果/验证bm3d方法_自相似/full_0_3_step2.png)|![](../../Docs/Images/0325结果/验证bm3d方法_自相似/full_0_step2_3_8.png)|
+
+注：Step1也用的维纳滤波
 
 + 验证加入帧间相似块时，聚合后的结果
 
+|      Original      |      Step_1      |
+| :--: | --------- | --------- |
+|![](../../Docs/Images/0325结果/验证bm3d方法_自相似/Orignial.png)|![](../../Docs/Images/0325结果/验证bm3d方法加入帧间相似/full_0_step1_16.png)|
+
 ------
 
-注：Step1也用的维纳滤波
 
 ### 2023.3.18组会
 
