@@ -17,7 +17,7 @@
 
 |      Original      |      Step_1      |
 | :--: | --------- |
-|![](../../Docs/Images/0325结果/验证bm3d方法_自相似/Orignial.png)|![](../../Docs/Images/0325结果/验证bm3d方法加入帧间相似/full_0_step1_16.png)|
+|![](../../Docs/Images/0325结果/验证bm3d方法_自相似/Orignial.png)|![](../../Docs/Images/0325结果/验证bm3d方法加入帧间相似/0_3_8_step1_16.png)|
 
 ------
 
