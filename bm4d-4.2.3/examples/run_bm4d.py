@@ -12,26 +12,6 @@ from experiment_funcs import generate_noise, get_experiment_kernel, get_psnr, ge
 from skimage.restoration import denoise_tv_chambolle, denoise_wavelet, estimate_sigma, denoise_nl_means, denoise_tv_bregman
 from einops import rearrange, repeat
 
-# sys.path.append("./fast-openISP")
-# from pipeline import Pipeline
-# from util.yacs import Config
-
-
-# def starlightFastISP(rawIn):
-#     """
-#     Usage:
-#         rgb = starFastISP(packing[0])
-#             input shape : (rawH,rawW)
-#     Keys of pipeline.execute output:
-#         (['bayer', 'rgb_image', 'y_image', 'cbcr_image', 'edge_map', 'output'])
-#     """
-#     cfg = Config('./fast-openISP/configs/tiff.yaml')
-#     pipeline = Pipeline(cfg)
-#
-#     rawIn = rawIn.reshape((cfg.hardware.raw_height, cfg.hardware.raw_width))
-#     rawOut, _ = pipeline.execute(rawIn)
-#
-#     return rawOut
 
 raw_path = '/media/cuhksz-aci-03/数据/DRV_noprocess/short/'
 seq_id = "0094"
@@ -41,32 +21,6 @@ p_size = 3
 itr = 1
 img_match = []
 
-# def gammasRGB(image, mode='compress'):
-# 	'''sRGB transfer function'''
-# 	if mode == 'compress':
-# 		if np.issubdtype(image.dtype, np.unsignedinteger):
-# 			return uGammaCompress_(image, 0.0031308, 12.92, 1.055, 1. / 2.4)
-# 		else:
-# 			return fGammaCompress_(image, 0.0031308, 12.92, 1.055, 1. / 2.4)
-# 	else:
-# 		if np.issubdtype(image.dtype, np.unsignedinteger):
-# 			return uGammaDecompress_(image, 0.04045, 12.92, 1.055, 2.4)
-# 		else:
-# 			return fGammaDecompress_(image, 0.04045, 12.92, 1.055, 2.4)
-
-def edge_enhancement(rgb_img):
-    rgb_img = rgb_img/255.
-    rgb_img = rearrange(rgb_img, 'h w c -> 1 c h w')
-
-    kernel = torch.tensor([[0, -1, 0], [-1, 5., -1], [0, -1, 0]])
-    kernel = repeat(kernel, 'h w -> c 1 h w', c=3)
-
-    ee_img = F.conv2d(torch.tensor(rgb_img), kernel, padding=1, groups=3)
-    ee_img = ee_img.detach().numpy().squeeze()
-    ee_img = rearrange(ee_img, 'c h w -> h w c')
-    ee_img = ((ee_img - ee_img.min()) / (ee_img.max() - ee_img.min())) * 255.
-
-    return ee_img
 
 def gamma_correction(img, c=1, g=2.2):
     out = img.copy()
@@ -76,22 +30,6 @@ def gamma_correction(img, c=1, g=2.2):
     out = out.astype(np.float32)
 
     return out
-
-def pyramid_downsample(image):
-    level = 3
-    temp = image.copy()
-
-    for i in range(level):
-        dst = cv2.pyrDown(temp)
-        temp = dst.copy()
-
-    return dst
-#
-# def lapalian_upsample(image):
-
-def image_interpolation(img,new_dimension,inter_method):
-    inter_img = cv2.resize(img,new_dimension,interpolation=inter_method)
-    return inter_img
 
 class AutoGammaCorrection: # img in HSV Space
     def __init__(self, img):
@@ -111,29 +49,6 @@ class AutoGammaCorrection: # img in HSV Space
                 #     print(x, Y[y, x], gc_img[y, x])
         return gc_img
 
-def vevid_simple(rawimg, G, bais):
-    out_img = np.arctan2(-G * (rawimg + bais), rawimg)
-
-    return out_img
-
-def pack_gbrg_raw(raw):
-    #pack GBRG Bayer raw to 4 channels
-    black_level = 240
-    white_level = 2**12-1
-    im = raw.astype(np.float32)
-    # im = np.maximum(im - black_level, 0) / (white_level-black_level)
-
-    im = np.expand_dims(im, axis=2)
-    img_shape = im.shape
-    H = img_shape[0]
-    W = img_shape[1]
-
-    out = np.concatenate((im[1:H:2, 0:W:2, :],
-                          im[1:H:2, 1:W:2, :],
-                          im[0:H:2, 1:W:2, :],
-                          im[0:H:2, 0:W:2, :]), axis=2)
-    return out
-
 def pack_raw(raw):
 
     im = raw.raw_image_visible.astype(np.float32)
@@ -152,10 +67,8 @@ rawpyParam = {
             'output_bps' : 16}
 
 def load_video_seq(folder_name, seqID, start_ind, num_to_load):
-    # base_name_seq = folder_name + 'seq' + str(seqID) + '/'  # starlight
     base_name_seq = folder_name + str(seqID) + '/'
-    # filepaths_all = glob(base_name_seq + '*.ARW')
-    filepaths_all = glob(base_name_seq + '*.tiff')
+    filepaths_all = glob(base_name_seq + '*.ARW')
     total_num = len(filepaths_all)
 
     ind = []
@@ -181,7 +94,7 @@ def load_video_seq(folder_name, seqID, start_ind, num_to_load):
 input_seq = load_video_seq(raw_path, seq_id, star_id, num_load)
 
 
-# nv = 104.45/65535*16383
+# 预去噪
 for num in range(len(input_seq)):
     # noise_variance = estimate_sigma(np.sqrt(input_seq[num, ...] + (3 / 8)))
     mergedImage_exp = np.expand_dims(np.sqrt(input_seq[num, ...]+(3/8)), axis=-1)
@@ -200,6 +113,7 @@ for num in range(len(input_seq)):
 
     input_seq[num, ...] = mergimg**2-(3/8)
 
+# 帧间匹配对齐
 img_match.append(np.sqrt(input_seq[0]+(3/8)))
 for i in range(input_seq.shape[0]-1):
     img_ori = input_seq[0]
@@ -220,16 +134,6 @@ for i in range(input_seq.shape[0]-1):
 
 img_match_array = np.array(img_match)
 y = img_match_array.transpose(1, 2, 0)
-# y = input_seq.transpose(1, 2, 0)
-
-# for num in range(len(img_match_array)):
-#     for c, (di, dj) in enumerate(zip([0, 1, 0, 1], [0, 0, 1, 1])):
-#         # noise_variance = estimate_sigma(np.sqrt(y[di::2, dj::2, num]+(3/8)))
-#         # y[di::2, dj::2, num] = (denoise_wavelet(np.sqrt(y[di::2, dj::2, num]+(3/8)), noise_variance))
-#         # y[di::2, dj::2, num] = (c(np.sqrt(y[di::2, dj::2, num]+(3/8)), weight=0.5, n_iter_max=100))
-#         y[di::2, dj::2, num] = (
-#             denoise_nl_means(np.sqrt(y[di::2, dj::2, num] + (3 / 8)), 8, 5, 0.1))
-
 
 for c, (di, dj) in enumerate(zip([0, 1, 0, 1], [0, 0, 1, 1])):
     # Possible noise types to be generated 'gw', 'g1', 'g2', 'g3', 'g4', 'g1w',
@@ -280,16 +184,7 @@ for c, (di, dj) in enumerate(zip([0, 1, 0, 1], [0, 0, 1, 1])):
     # plt.imshow(np.squeeze(disp_mat))
     # plt.show()
 
-
-# for c, (di, dj) in enumerate(zip([0, 1, 0, 1], [0, 0, 1, 1])):
-#             noise_variance = estimate_sigma((y[di::2, dj::2, 0]))
-#             y[di::2, dj::2, 0] = (
-#                 denoise_wavelet((y[di::2, dj::2, 0]), noise_variance))
-            # y[di::2, dj::2, 0] = (
-                            # denoise_bilateral((y[di::2, dj::2, 0]), 0.05, 15))
-
-
-noise_variance = estimate_sigma(np.sqrt(input_seq[num, ...] + (3 / 8)))
+# 缓解块效应
 mergedImage_exp = np.expand_dims((y[:, :, 0]), axis=-1)
 merge_h, merge_w = y[:, :, 0].shape
 mergedImage_exp = mergedImage_exp
@@ -312,41 +207,23 @@ raw = rawpy.imread(raw)
 raw.raw_image_visible[1124:1636, 2920:3432] = y[:, :, 0]**2-(3/8)
 post_raw = raw.postprocess(**rawpyParam)
 cfa = (post_raw[1124:1636, 2920:3432] / 65535. * 255.).astype(np.float32)  # scale and set type for cv2
+
+# To HSV and local tone mapping
 hsv = cv2.cvtColor(cfa, cv2.COLOR_RGB2HSV)
 hsvOperator = AutoGammaCorrection(hsv)
 enhanceV = hsvOperator.execute()
 hsv[..., -1] = enhanceV * 255.
 enhanceRGB = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
-# enhanceRGB = edge_enhancement(enhanceRGB)
-enhanceRGB = cv2.cvtColor(enhanceRGB, cv2.COLOR_RGB2BGR)
-
 img_write = cv2.normalize(((enhanceRGB)), dst=None, alpha=0, beta=255,
               norm_type=cv2.NORM_MINMAX).astype(np.uint8)
-# yuv_ori = cv2.cvtColor(img_write.astype(np.uint8), cv2.COLOR_RGB2YUV_I420)
-# filter_rgb = cv2.ximgproc.guidedFilter(img_write.astype(np.uint8), img_write.astype(np.uint8), 30, 0.05*16383, -1)
-# yuv_filimg = cv2.cvtColor(filter_rgb, cv2.COLOR_RGB2YUV_I420)
-# yuv_filimg[..., 0] = yuv_ori[..., 0]
-# # yuv_filimg[..., 0] = (yuv_ori[..., 0] - yuv_ori[..., 0].min()) / (yuv_ori[..., 0].max() - yuv_ori[..., 0].min())
-# rbg_filimg = cv2.cvtColor(yuv_filimg, cv2.COLOR_YUV2RGB_I420)
-# rbg_filimg = cv2.cvtColor(rbg_filimg, cv2.COLOR_RGB2BGR)
-# # rbg_filimg = (rbg_filimg - rbg_filimg.min()) / (rbg_filimg.max() - rbg_filimg.min()) * 255
-# # rbg_filimg = np.clip(rbg_filimg, 0, 255)
-# # rbg_filimg = cv2.cvtColor(rbg_filimg, cv2.COLOR_RGB2BGR)
+
+# 去彩噪
+yuv_ori = cv2.cvtColor(img_write.astype(np.uint8), cv2.COLOR_RGB2YUV_I420)
+filter_rgb = cv2.ximgproc.guidedFilter(img_write.astype(np.uint8), img_write.astype(np.uint8), 30, 0.05*16383, -1)
+yuv_filimg = cv2.cvtColor(filter_rgb, cv2.COLOR_RGB2YUV_I420)
+yuv_filimg[..., 0] = yuv_ori[..., 0]
+rbg_filimg = cv2.cvtColor(yuv_filimg, cv2.COLOR_YUV2RGB_I420)
+rbg_filimg = cv2.cvtColor(rbg_filimg, cv2.COLOR_RGB2BGR)
+
 
 cv2.imwrite('/home/cuhksz-aci-03/Documents/UltralLowLightRawVideoISP-main/results/0.1_6400_' + str(0) + '.png', (img_write))
-
-
-# for i in range(len(img_match_array)):
-#     # raw_img = input_seq[i]
-#     raw.raw_image_visible[740:2020, 2096:4256] = img_match_array[i]
-#     post_raw = raw.postprocess(**rawpyParam)
-#     cfa = (post_raw[740:2020, 2096:4256] / 65535. * 255.).astype(np.float32)  # scale and set type for cv2
-#     hsv = cv2.cvtColor(cfa, cv2.COLOR_RGB2HSV)
-#     hsvOperator = AutoGammaCorrection(hsv)
-#     enhanceV = hsvOperator.execute()
-#     hsv[..., -1] = enhanceV * 255.
-#     enhanceRGB = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
-#     enhanceRGB = cv2.cvtColor(enhanceRGB, cv2.COLOR_RGB2BGR)
-#     img_write = cv2.normalize(((enhanceRGB)**1/2.2), dst=None, alpha=0, beta=255,
-#                   norm_type=cv2.NORM_MINMAX).astype(np.uint8)
-#     cv2.imwrite('/home/cuhksz-aci-03/Documents/UltralLowLightRawVideoISP-main/results/downup_frame_' + str(i) + '.png', (img_write))
