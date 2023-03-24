@@ -1,0 +1,52 @@
+Metadata-Version: 2.1
+Name: bm4d
+Version: 4.2.3
+Summary: BM4D for correlated noise
+Author: Ymir Mäkinen
+Author-email: ymir.makinen@tuni.fi
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: Free for non-commercial use
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: Science/Research
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: MacOS
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Classifier: Topic :: Scientific/Engineering :: Mathematics
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.5
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# Python wrapper for BM4D denoising - from Tampere with love, again
+
+Python wrapper for BM4D for stationary correlated noise (including white noise).
+
+BM4D is an algorithm for attenuation of additive spatially correlated
+stationary (aka colored) Gaussian noise for volumetric data.
+This package provides a wrapper for the BM4D binaries for Python for the denoising of volumetric and volumetric multichannel data. For denoising of images/2-D multichannel data, see also the "bm3d" package.
+
+This implementation is based on 
+Y. Mäkinen, L. Azzari, A. Foi, 2020,
+"Collaborative Filtering of Correlated Noise: Exact Transform-Domain Variance for Improved Shrinkage and Patch Matching",
+in IEEE Transactions on Image Processing, vol. 29, pp. 8339-8354, and
+Y. Mäkinen, S. Marchesini, A. Foi, 2021,
+"Ring Artifact and Poisson Noise Attenuation via Volumetric Multiscale Nonlocal Collaborative Filtering of Spatially Correlated Noise", submitted to Journal of Synchrotron Radiation.
+
+The package contains the BM4D binaries compiled for:
+- Windows (Win10, MinGW-32)
+- Linux (CentOS 7, 64-bit)
+- Mac OSX (El Capitan, 64-bit)
+
+The package is available for non-commercial use only. For details, see LICENSE.
+
+Basic usage:
+```python
+	y_hat = bm4d(z, sigma); # white noise: include noise std
+	y_hat = bm4d(z, psd); # correlated noise: include noise PSD (size of z)
+```
+
+For usage examples, see the examples folder of the full source (bm4d-***.tar.gz) from https://pypi.org/project/bm4d/#files
+
+Contact: Ymir Mäkinen <ymir.makinen@tuni.fi> 
