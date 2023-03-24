@@ -23,6 +23,20 @@
 
 ![](../../Docs/Images/0325结果/iso6400_0.1/BM4D/final.png)
 
++ DRV 静态视频对比结果
+
+**0049(f 4.5, iso 320, 1/30s)**
+
+|      Original      |      BM4D      |      Final      |
+| :--: | --------- |--------- |
+|![](../../Docs/Images/0325结果/iso6400_0.1/0049/orignial.png)|![](../../Docs/Images/0325结果/iso6400_0.1/0049/oribm4d.png)|![](../../Docs/Images/0325结果/iso6400_0.1/0049/final.png)|
+
+**0061(f 5.0, iso 250, 1/30s)**
+
+|      Original      |      BM4D      |      Final      |
+| :--: | --------- |--------- |
+|![](../../Docs/Images/0325结果/iso6400_0.1/0061/orignial.png)|![](../../Docs/Images/0325结果/iso6400_0.1/0061/bm4d.png)|![](../../Docs/Images/0325结果/iso6400_0.1/0061/final.png)|
+
 + Code：**[BM3D](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/bm3d_python_package_3.0.9/bm3d-3.0.9/examples/run_bm3d.py)**, **[BM4D](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/bm4d-4.2.3/examples/run_bm4d.py)**
 
 + 目前的问题
@@ -31,7 +45,9 @@
     
     + 因为做不到完全对齐，所以在去噪效果不好，加了一些其他方法来弥补，会造成细节的丢失。对于静止视频序列的测试，原bm4d方法在细节上表现的比目前的pipeline好。
 
-    + 目前的pipeline对于不是非常暗的情况下(0.5-5lux)，去噪效果处理的还可以，对于0.1以下的情况处理的不理想。
+    + 目前的pipeline对于DRV数据集中的部分数据，去噪效果处理的还可以，对于自己拍摄的0.1以下的情况处理的不理想。
+
+    + 如果拍摄的raw图像过黑，rawpy处理后生成的rgb图像呈现绿色。
 
 ------
 
