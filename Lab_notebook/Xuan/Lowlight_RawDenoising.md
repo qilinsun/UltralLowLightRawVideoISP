@@ -21,13 +21,17 @@
 
 + 需要先对传感器的噪声进行去除，但是使用之前标定出的噪声，然后放入小波方法中进行去噪，块效应明显，就先使用tv方法进行了预去噪。在最后输出的时候加了一个可以缓解块效应的方法和导向滤波去彩噪，结果如下
 
-![](../../Docs/Images/0325结果/iso6400_0.1/BM4D/final.png
+![](../../Docs/Images/0325结果/iso6400_0.1/BM4D/final.png)
 
 + Code：**[BM3D](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/bm3d_python_package_3.0.9/bm3d-3.0.9/examples/run_bm3d.py)**, **[BM4D](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/bm4d-4.2.3/examples/run_bm4d.py)**
 
 + 目前的问题
+
+    + 目前的pipeline没有采用vbm4d方法中的运动补偿和通过轨迹来组成4维体素块的方法。因此，我们寻找的体素块是等长的，不需要转场控制方法。
     
     + 因为做不到完全对齐，所以在去噪效果不好，加了一些其他方法来弥补，会造成细节的丢失。对于静止视频序列的测试，原bm4d方法在细节上表现的比目前的pipeline好。
+
+    + 目前的pipeline对于不是非常暗的情况下(0.5-5lux)，去噪效果处理的还可以，对于0.1以下的情况处理的不理想。
 
 ------
 
