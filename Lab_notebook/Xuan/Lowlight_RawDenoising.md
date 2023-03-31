@@ -59,7 +59,7 @@
 
 |      Original    |    BM4D  |     HDR+    |  Maskdngan |    Hrnet   | Pipeline |
 | :--: | --------- |--------- | ----------- |----------- |----------- |
-|![](../../Docs/Images/0325结果/iso6400_0.1/0049/orignial.png)|![]()|![](.../../Docs/Images/0325结果/iso6400_0.1/0049/hdr+.png)|![](../../Docs/Images/0325结果/iso6400_0.1/0049/maskdngan.png)|![](../../Docs/Images/0325结果/iso6400_0.1/0049/hrnet.png)|![]()|
+|![](../../Docs/Images/0325结果/iso6400_0.1/0049/orignial.png)|![]()|![](../../Docs/Images/0325结果/iso6400_0.1/0049/hdr+.png)|![](../../Docs/Images/0325结果/iso6400_0.1/0049/maskdngan.png)|![](../../Docs/Images/0325结果/iso6400_0.1/0049/hrnet.png)|![]()|
 
 **本周总结**
 
