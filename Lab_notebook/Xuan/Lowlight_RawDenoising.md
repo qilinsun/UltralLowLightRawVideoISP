@@ -19,13 +19,13 @@
 
 |      Original    |   BM4D  |   HDR+   | Maskdngan | Hrnet | Pipeline |
 | :--: | --------- | --------- | ----------- |----------- |----------- |
-|![]()|![]()|![]()|![]()|![]()|![]()|
+|![](../../Docs/Images/20230401/0.1_2500/still_2500_0.1/original.png)|![](../../Docs/Images/20230401/0.1_2500/still_2500_0.1/BM4D.png)|![](../../Docs/Images/20230401/0.1_2500/still_2500_0.1/hdr+.png)|![](../../Docs/Images/20230401/0.1_2500/still_2500_0.1/maskdngan.png)|![](../../Docs/Images/20230401/0.1_2500/still_2500_0.1/hrnet.png)|![]()|
 
 + 动态
 
 |      Original    |   BM4D  |   HDR+   | Maskdngan | Hrnet | Pipeline |
 | :--: | --------- | --------- | ----------- |----------- |----------- |
-|![]()|![]()|![]()|![]()|![]()|![]()|
+|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/original.png)|![]()|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/hdr+.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/maskdngan.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/hrnet.png)|![]()|
 
 **0.01lux**
 
@@ -54,6 +54,12 @@
 |      Original    |   BM4D  |   HDR+   | Maskdngan | Hrnet | Pipeline |
 | :--: | --------- | --------- | ----------- |----------- |----------- |
 |![]()|![]()|![]()|![]()|![]()|![]()|
+
+**0049(f 4.5, iso 320, 1/30s)**
+
+|      Original    |    BM4D  |     HDR+    |  Maskdngan |    Hrnet   | Pipeline |
+| :--: | --------- |--------- | ----------- |----------- |----------- |
+|![](../../Docs/Images/0325结果/iso6400_0.1/0049/orignial.png)|![]()|![](.../../Docs/Images/0325结果/iso6400_0.1/0049/hdr+.png)|![](../../Docs/Images/0325结果/iso6400_0.1/0049/maskdngan.png)|![]()|![]()|
 
 ------
 
