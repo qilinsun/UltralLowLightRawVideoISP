@@ -25,7 +25,7 @@
 
 |      Original    |   BM4D  |   HDR+   | Maskdngan | Hrnet | Pipeline |
 | :--: | --------- | --------- | ----------- |----------- |----------- |
-|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/original.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/bm4d.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/hdr+.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/maskdngan.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/hrnet.png)|![]()|
+|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/original.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/bm4d.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/hdr+.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/maskdngan.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/hrnet.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/pipeline.png)|
 
 **0.01lux**
 
