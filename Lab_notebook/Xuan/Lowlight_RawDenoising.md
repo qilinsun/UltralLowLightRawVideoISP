@@ -19,13 +19,13 @@
 
 |      Original    |   BM4D  |   HDR+   | Maskdngan | Hrnet | Pipeline |
 | :--: | --------- | --------- | ----------- |----------- |----------- |
-|![](../../Docs/Images/20230401/0.1_2500/still_2500_0.1/original.png)|![](../../Docs/Images/20230401/0.1_2500/still_2500_0.1/BM4D.png)|![](../../Docs/Images/20230401/0.1_2500/still_2500_0.1/hdr+.png)|![](../../Docs/Images/20230401/0.1_2500/still_2500_0.1/maskdngan.png)|![](../../Docs/Images/20230401/0.1_2500/still_2500_0.1/hrnet.png)|![]()|
+|![](../../Docs/Images/20230401/0.1_2500/still_2500_0.1/original.png)|![](../../Docs/Images/20230401/0.1_2500/still_2500_0.1/BM4D.png)|![](../../Docs/Images/20230401/0.1_2500/still_2500_0.1/hdr+.png)|![](../../Docs/Images/20230401/0.1_2500/still_2500_0.1/maskdngan.png)|![](../../Docs/Images/20230401/0.1_2500/still_2500_0.1/hrnet.png)|![](../../Docs/Images/20230401/0.1_2500/still_2500_0.1/pipeline.png)|
 
 + 动态
 
 |      Original    |   BM4D  |   HDR+   | Maskdngan | Hrnet | Pipeline |
 | :--: | --------- | --------- | ----------- |----------- |----------- |
-|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/original.png)|![]()|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/hdr+.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/maskdngan.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/hrnet.png)|![]()|
+|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/original.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/bm4d.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/hdr+.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/maskdngan.png)|![](../../Docs/Images/20230401/0.1_2500/motion_2500_0.1/hrnet.png)|![]()|
 
 **0.01lux**
 
@@ -59,14 +59,13 @@
 
 |      Original    |    BM4D  |     HDR+    |  Maskdngan |    Hrnet   | Pipeline |
 | :--: | --------- |--------- | ----------- |----------- |----------- |
-|![](../../Docs/Images/0325结果/iso6400_0.1/0049/orignial.png)|![]()|![](.../../Docs/Images/0325结果/iso6400_0.1/0049/hdr+.png)|![](../../Docs/Images/0325结果/iso6400_0.1/0049/maskdngan.png)|![]()|![]()|
+|![](../../Docs/Images/0325结果/iso6400_0.1/0049/orignial.png)|![]()|![](.../../Docs/Images/0325结果/iso6400_0.1/0049/hdr+.png)|![](../../Docs/Images/0325结果/iso6400_0.1/0049/maskdngan.png)|![](../../Docs/Images/0325结果/iso6400_0.1/0049/hrnet.png)|![]()|
 
 **本周总结**
 
 + 在0.1lux下的静态图像所有算法表现的都较好，但是在0.1lux的动态图像中hdr+, maskdngan, hrnet, bm4d表现都有不足。
 
 + 在0.01lux下的静态图像所有算法表现都不太好，我们的方法处理完图像之后绿色通道很明显。
-
 
 ------
 
