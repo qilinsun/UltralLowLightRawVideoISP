@@ -1,3 +1,0 @@
-PyWavelets
-numpy
-scipy
