@@ -3,9 +3,23 @@
 
 ### 2023.3.28-2023.4.1
 
-+ 在预处理使用的方法BM3D硬阈值中，进行了块的剔除处理。在寻找出与当前块的相似块后，计算每个块的频率，将高频分量少(低频分量高)的块剔除，然后在进行硬阈值的协同滤波聚合。[code]()
++ 在预处理使用的方法BM3D硬阈值中，进行了块的剔除处理。在寻找出与当前块的相似块后，计算每个块的频率，将高频分量少(低频分量高)的块剔除，然后在进行硬阈值的协同滤波聚合。[预处理硬阈值部分进行块剔除code](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/bm4d_pipeline/examples/bm3d_1st_step.py), [pipeline code](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/bm4d_pipeline/examples/run_bm4d_v3.py)
 
 + 经过剔除处理后的bm3d，在经过后面的去噪，结果不理想。
+
+**结果**
+
++ 先用的rgb灰度图进行测试
+
+|      Hard+BM4D    |   Hard+块剔除+BM4D  |  
+| :--: | --------- | 
+|![]()|![]()|
+
++ 自己图像的测试
+
+|      Hard+BM4D    |   Hard+块剔除+BM4D  |  
+| :--: | --------- | 
+|![]()|![]()|
 
 ### 2023.3.27
 
