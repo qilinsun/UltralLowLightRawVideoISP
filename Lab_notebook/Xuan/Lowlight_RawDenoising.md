@@ -11,7 +11,7 @@
 
 + 先用的rgb灰度图进行测试
 
-|      Hard+BM4D    |   Hard+块剔除+BM4D  |  
+|      BM3D_Hard    |   BM3D_Hard+块剔除  |  
 | :--: | --------- | 
 |![](../../Docs/Images/20230401/块剔除实验对比/grayscale/原方法.png)|![](../../Docs/Images/20230401/块剔除实验对比/grayscale/剔除块.png)|
 
