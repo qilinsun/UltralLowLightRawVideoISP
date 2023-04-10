@@ -54,7 +54,8 @@ def bm3d_1st_step(sigma, img_noisy, nHard, kHard, NHard, pHard, lambdaHard3D, ta
                 cA_list.append(cA_mean)
             sort_ind = np.argsort(cA_list)
             nSx_r = nSx_r - int(num / 4)
-         
+            
+            # 去除图块，重新对应图块及其位置
             for j in range(nSx_r):
                
                 new_group[j, :, :] = re_group_3d[sort_ind[j], :, :]
@@ -108,5 +109,5 @@ def bm3d_1st_step(sigma, img_noisy, nHard, kHard, NHard, pHard, lambdaHard3D, ta
                 numerator[int(ni):int(ni) + kHard, int(nj):int(nj) + kHard] += patch * kaiserWindow * weight
                 denominator[int(ni):int(ni) + kHard, int(nj):int(nj) + kHard] += kaiserWindow * weight
 
-    img_basic = numerator / (denominator+1e-6)
+    img_basic = numerator / (denominator)
     return img_basic
