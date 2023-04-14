@@ -10,7 +10,26 @@ from build_3D_group import build_3D_group
 from ht_filtering_hadamard import ht_filtering_hadamard
 import pywt
 
+def filter_low(fshift, block, radius_ratio):
+    filter_img = np.ones(fshift.shape)
+    crow, col = int(fshift.shape[0]/2), int(fshift.shape[1]/2)
+    radius = int(radius_ratio*block.shape[0])
 
+    if len(block.shape) == 3:
+        cv2.circle(filter_img, (crow, col), radius, (0,0,0), -1)
+    else:
+        cv2.circle(filter_img, (crow, col), radius, 0, -1)
+
+    return filter_img*block
+
+def ifft(fshift):
+    """
+    傅里叶逆变换
+    """
+    ishift = np.fft.ifftshift(fshift)  # 把低频部分sift回左上角
+    iimg = np.fft.ifftn(ishift)  # 出来的是复数，无法显示
+    iimg = np.abs(iimg)  # 返回复数的模
+    return iimg
 
 def bm3d_1st_step(sigma, img_noisy, nHard, kHard, NHard, pHard, lambdaHard3D, tauMatch, useSD, tau_2D):
     height, width = img_noisy.shape[0], img_noisy.shape[1]
@@ -46,11 +65,25 @@ def bm3d_1st_step(sigma, img_noisy, nHard, kHard, NHard, pHard, lambdaHard3D, ta
             mask_1 = np.zeros((ph, pw, 2))
             mask_1[int(ph / 2) - 2:int(ph / 2) + 2, int(pw / 2) - 2:int(pw / 2) + 2] = 1
             
-            # 计算出所有相似图块的低频分量，去除低频分量最高(高频分量最少)的几个图块，其余图块做硬阈值处理及后续的聚合
-            cA_list = []
+            # 计算出所有相似图块的低频分量，去除低频分量最高(高频分量最少)的几个图块，其余图块做硬阈值处理及后续的聚合，小波变换处理的
+#             cA_list = []
+#             for i in range(num):
+#                 cA, (cH, cV, cD) = pywt.dwt2(re_group_3d[i], 'haar')
+#                 cA_mean = np.mean(cA)
+#                 cA_list.append(cA_mean)
+#             sort_ind = np.argsort(cA_list)
+#             nSx_r = nSx_r - int(num / 4)
+            
+            # 将傅里叶变换移位后，将中心区域的低频信息去除，保留高频信息，将高频信息排序，将高频分量少的块去掉
+            radius_ratio = 2.0
             for i in range(num):
-                cA, (cH, cV, cD) = pywt.dwt2(re_group_3d[i], 'haar')
-                cA_mean = np.mean(cA)
+                f = np.fft.fftn(re_group_3d[i])
+                fshift = np.fft.fftshift(f)
+                hight_parts_fshift = filter_low(fshift.copy(), re_group_3d[i], radius_ratio=radius_ratio)
+                high_parts_img = ifft(hight_parts_fshift)
+                img_new_high = (high_parts_img - np.amin(high_parts_img) + 0.00001) / (
+                        np.amax(high_parts_img) - np.amin(high_parts_img) + 0.00001)
+                cA_mean = np.mean(img_new_high * 16383)
                 cA_list.append(cA_mean)
             sort_ind = np.argsort(cA_list)
             nSx_r = nSx_r - int(num / 4)
