@@ -1,7 +1,21 @@
 
 ## 工作进程：
 
-### 2023.3.28-2023.4.1
+### 2023.4.11-4.14
+
++ 根据上次看的结果，低频信息消失了，可能是在计算频率那出现问题，将原来的方法进行了更换 [Code](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/bm4d_pipeline/examples/bm3d_1st_step.py)
+
+**调试的实验结果**
+
+**本周总结**
+
++ 在噪声水平较高时，为了将噪声处理的更干净，就会将图像很多的细节信息抹掉，图像变得模糊
+
++ 在噪声水平较高时，利用目前的块匹配方法匹配出的图像质量不高，会影响后续的去噪结果
+
+------
+
+### 2023.4.4-4.7
 
 + 在预处理使用的方法BM3D硬阈值中，进行了块的剔除处理。在寻找出与当前块的相似块后，计算每个块的频率，将高频分量少(低频分量高)的块剔除，然后在进行硬阈值的协同滤波聚合。[预处理硬阈值部分进行块剔除code](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/bm4d_pipeline/examples/bm3d_1st_step.py), [pipeline code](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/bm4d_pipeline/examples/run_bm4d_v3.py)
 
@@ -21,7 +35,9 @@
 | :--: | --------- | 
 |![](../../Docs/Images/20230401/块剔除实验对比/0.01/原方法.png)|![](../../Docs/Images/20230401/块剔除实验对比/0.01/块剔除.png)|
 
-### 2023.3.27
+------
+
+### 2023.3.27-4.4
 
 + 修改pipeline将BM3D预处理方法加入到框架中，并分析噪声。
 
@@ -53,27 +69,13 @@
 
 |      Original    |   BM4D  |   HDR+   | Maskdngan | Hrnet | Pipeline |
 | :--: | --------- | --------- | ----------- |----------- |----------- |
-|![]()|![]()|![]()|![]()|![]()|![]()|
+|![](../../Docs/Images/20230401/still_0.01_25600/original.png)|![](../../Docs/Images/20230401/still_0.01_25600/bm4d.png)|![](../../Docs/Images/20230401/still_0.01_25600/hdr+.png)|![](../../Docs/Images/20230401/still_0.01_25600/maskdngan.png)|![](../../Docs/Images/20230401/still_0.01_25600/hrnet.png)|![](../../Docs/Images/20230401/块剔除实验对比/0.01/原方法.png)|
 
 + 动态
 
 |      Original    |   BM4D  |   HDR+   | Maskdngan | Hrnet | Pipeline |
 | :--: | --------- | --------- | ----------- |----------- |----------- |
 |![](../../Docs/Images/20230401/motion_0.01_51200/original.png)|![](../../Docs/Images/20230401/motion_0.01_51200/bm4d.png)|![](../../Docs/Images/20230401/motion_0.01_51200/hdr+.png)|![](../../Docs/Images/20230401/motion_0.01_51200/maskdngan.png)|![](../../Docs/Images/20230401/motion_0.01_51200/hrnet.png)|![](../../Docs/Images/20230401/motion_0.01_51200/pipeline.png)|
-
-**0.001lux**
-
-+ 静态
-
-|      Original    |   BM4D  |   HDR+   | Maskdngan | Hrnet | Pipeline |
-| :--: | --------- | --------- | ----------- |----------- |----------- |
-|![]()|![]()|![]()|![]()|![]()|![]()|
-
-+ 动态
-
-|      Original    |   BM4D  |   HDR+   | Maskdngan | Hrnet | Pipeline |
-| :--: | --------- | --------- | ----------- |----------- |----------- |
-|![]()|![]()|![]()|![]()|![]()|![]()|
 
 **0049(f 4.5, iso 320, 1/30s)**
 
