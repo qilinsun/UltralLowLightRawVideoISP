@@ -16,7 +16,7 @@
 
 |      BM3D_Hard+PM+BM4D       |   BM3D_Hard+PM+ST(HDR+)  |  
 | :--: | --------- | 
-|![](../../Docs/Images/20230401/块剔除实验对比/0.01/原方法.png)|![](../../Docs/Images/20230401/still_0.01_25600/bm3d_st.png)|
+|![](../../Docs/Images/20230401/块剔除实验对比/0.01/原方法.png)|![](../../Docs/Images/20230401/still_0.01_25600/bm3d_pmst.png)|
 
 **本周总结**
 
