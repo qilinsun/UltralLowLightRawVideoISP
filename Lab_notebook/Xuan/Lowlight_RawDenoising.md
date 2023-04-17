@@ -1,6 +1,14 @@
 
 ## 工作进程：
 
+### 2023.4.16组会
+
++ 结合目前的结果，应该是帧间匹配的时候，PM方法应该是出现了问题，可能不work(PatchMatch: A Randomized Correspondence Algorithm for Structural Image Editing)，先将这个方法的offset图打印出来看下
+
++ 左超组的微光视频去噪，帧间匹配是如何做的
+
+**先将帧间匹配这个地方搞定**
+
 ### 2023.4.11-4.14
 
 + 根据上次看的结果，低频信息消失了，可能是在计算频率那出现问题，将原来的方法进行了更换 [Code](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/bm4d_pipeline/examples/bm3d_1st_step.py)
@@ -357,7 +365,7 @@
 
 + pipeline
 
-![](../..//Docs/Images/Pipeline0103.png)
+![](../../Docs/Images/Pipeline0103.png)
 
 + 算法流程
 
