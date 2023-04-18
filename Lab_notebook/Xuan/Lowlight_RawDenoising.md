@@ -9,6 +9,8 @@
 
     + [Needle match](https://openaccess.thecvf.com/content_cvpr_2016/papers/Lotan_Needle-Match_Reliable_Patch_CVPR_2016_paper.pdf), [Coarse-to-Fine PatchMatch](https://ieeexplore.ieee.org/document/7959195), [Deepmatching](https://arxiv.org/pdf/1506.07656.pdf)等方法都设置了金字塔结构，由粗到细的匹配。在我们的pipeline中也可以使用这种方式的匹配方法。
 
++ 研究了Deepmatching算法，并进行了编译，测试结果
+
 ### 2023.4.16组会
 
 + 结合目前的结果，应该是帧间匹配的时候，PM方法应该是出现了问题，可能不work(PatchMatch: A Randomized Correspondence Algorithm for Structural Image Editing)，先将这个方法的offset图打印出来看下
