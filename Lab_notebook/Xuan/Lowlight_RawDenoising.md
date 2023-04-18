@@ -7,7 +7,7 @@
 
 + 文献阅读
 
-    + [Needle match](https://openaccess.thecvf.com/content_cvpr_2016/papers/Lotan_Needle-Match_Reliable_Patch_CVPR_2016_paper.pdf), [Coarse-to-Fine PatchMatch](https://ieeexplore.ieee.org/document/7959195), [Deepmatching]([https://inria.hal.science/hal-01148432v2/file/paper.pdf](https://arxiv.org/pdf/1506.07656.pdf)等方法都设置了金字塔结构，由粗到细的匹配。在我们的pipeline中也可以使用这种方式的匹配方法。
+    + [Needle match](https://openaccess.thecvf.com/content_cvpr_2016/papers/Lotan_Needle-Match_Reliable_Patch_CVPR_2016_paper.pdf), [Coarse-to-Fine PatchMatch](https://ieeexplore.ieee.org/document/7959195), [Deepmatching](https://arxiv.org/pdf/1506.07656.pdf)等方法都设置了金字塔结构，由粗到细的匹配。在我们的pipeline中也可以使用这种方式的匹配方法。
 
 ### 2023.4.16组会
 
