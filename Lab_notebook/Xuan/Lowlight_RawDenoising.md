@@ -9,7 +9,9 @@
 
     + [Needle match](https://openaccess.thecvf.com/content_cvpr_2016/papers/Lotan_Needle-Match_Reliable_Patch_CVPR_2016_paper.pdf), [Coarse-to-Fine PatchMatch](https://ieeexplore.ieee.org/document/7959195), [Deepmatching](https://arxiv.org/pdf/1506.07656.pdf)等方法都设置了金字塔结构，由粗到细的匹配。在我们的pipeline中也可以使用这种方式的匹配方法。
 
-+ 研究了Deepmatching算法，并进行了编译，测试RGB图像结果是否能复现，检查代码
++ 研究了Deepmatching和Deepflow算法，并进行了编译，测试了RGB图像结果与论文中的结果一致
+
++ 测试我们的数据
 
 ### 2023.4.16组会
 
