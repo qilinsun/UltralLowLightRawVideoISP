@@ -11,7 +11,7 @@
 
 + 研究了Deepmatching和Deepflow算法，并进行了编译，测试了RGB图像结果与论文中的结果一致
 
-+ Deepmatching和Deepflow测试我们的数据，先测试了由RAW转成RGB图像的光流和映射图，在一些地方存在匹配不上的问题，且编译好的版本只能测试3通道图，deepflow代码不能进行修改
++ Deepmatching和Deepflow测试我们的数据，先测试了由RAW转成RGB图像的光流和映射图，在一些地方存在匹配不上的问题，且编译好的版本只能测试3通道图，deepflow代码不能进行修改，opencv库里有些相应的光流匹配算法，deepflow，dis flow等，用这些方法在进行测试
 
 ### 2023.4.16组会
 
