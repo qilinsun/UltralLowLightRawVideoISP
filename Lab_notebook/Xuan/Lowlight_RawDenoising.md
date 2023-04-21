@@ -15,7 +15,7 @@
 
     + 在静态图上，使用Deepflow，disflow映射后的结果比较好，也比Patchmatch方法好
     
-    + 在动态图上，使用Deepflow，disflow映射后的结果，还是会存在一些位置上的漂移，感觉需要后面加个stabilization来修正一下，跟meshflow最后一步类似
+    + 在动态图上，使用Deepflow，disflow映射后的结果，还是会存在一些位置上的漂移，感觉需要后面加个stabilization来修正一下，跟meshflow最后一步类似(平滑处理)
 
 ### 2023.4.16组会
 
