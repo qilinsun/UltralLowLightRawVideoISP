@@ -13,6 +13,10 @@
 
 + Deepmatching和Deepflow测试我们的数据，先测试了由RAW转成RGB图像的光流和映射图，在一些地方存在匹配不上的问题，且编译好的版本只能测试3通道图，deepflow代码不能进行修改，opencv库里有些相应的光流匹配算法，deepflow，dis flow等，用这些方法在进行测试
 
+    + 在静态图上，使用Deepflow，disflow映射后的结果比较好，也比Patchmatch方法好
+    
+    + 在动态图上，使用Deepflow，disflow映射后的结果，还是会存在一些位置上的漂移，感觉需要后面加个stabilization来修正一下，跟meshflow最后一步类似
+
 ### 2023.4.16组会
 
 + 结合目前的结果，应该是帧间匹配的时候，PM方法应该是出现了问题，可能不work(PatchMatch: A Randomized Correspondence Algorithm for Structural Image Editing)，先将这个方法的offset图打印出来看下
