@@ -23,10 +23,19 @@
     | :--: | --------- | 
     |![](../../Docs/Images/20230401/pm_df匹配结果对比/静态图匹配结果对比.png)|![](../../Docs/Images/20230401/pm_df匹配结果对比/动态图匹配结果对比.png)|
     
-    由图中可以看出，静态图使用deepflow结果好于patchmatch。但是在动态图中，想让第5帧图匹配到第1帧，deepflow匹配不回去，patchmatch则能但是，效果不佳
+    由图中可以看出，静态图使用deepflow结果好于patchmatch。但是在动态图中，想让第5帧图匹配到第1帧，deepflow匹配不回去，patchmatch则能，但是效果不佳
     
     
+**0.01lux** 因为动态图测试结果还存在问题，在找问题调整，这里的pipeline_v2是增加了块剔除方法并使用了deepflow对齐的方法，pipeline_v1是块剔除和patchmatch方法。
 
++ 静态
+
+|      Original    |   BM4D  |   HDR+   | Maskdngan | Hrnet | Pipeline_v1 | Pipeline_v2 |
+| :--: | --------- | --------- | ----------- |----------- |----------- |----------- |
+|![](../../Docs/Images/20230401/still_0.01_25600/original.png)|![](../../Docs/Images/20230401/still_0.01_25600/bm4d.png)|![](../../Docs/Images/20230401/still_0.01_25600/hdr+.png)|![](../../Docs/Images/20230401/still_0.01_25600/maskdngan.png)|![](../../Docs/Images/20230401/still_0.01_25600/hrnet.png)|![](../../Docs/Images/20230401/块剔除实验对比/0.01/原方法.png)|![](../../Docs/Images/20230401/still_0.01_25600/deepflow.png)|
+    
+------
+    
 ### 2023.4.16组会
 
 + 结合目前的结果，应该是帧间匹配的时候，PM方法应该是出现了问题，可能不work(PatchMatch: A Randomized Correspondence Algorithm for Structural Image Editing)，先将这个方法的offset图打印出来看下
@@ -65,14 +74,6 @@
 + 在预处理使用的方法BM3D硬阈值中，进行了块的剔除处理。在寻找出与当前块的相似块后，计算每个块的频率，将高频分量少(低频分量高)的块剔除，然后在进行硬阈值的协同滤波聚合。[预处理硬阈值部分进行块剔除code](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/bm4d_pipeline/examples/bm3d_1st_step.py), [pipeline code](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/bm4d_pipeline/examples/run_bm4d_v3.py)
 
 + 经过剔除处理后的bm3d，在经过后面的去噪，结果不理想。
-
-**0.01lux** 因为动态图测试结果还存在问题，在找问题调整，这里的pipeline_v2是增加了块剔除方法并使用了deepflow对齐的方法，pipeline_v1是块剔除和patchmatch方法。
-
-+ 静态
-
-|      Original    |   BM4D  |   HDR+   | Maskdngan | Hrnet | Pipeline_v1 | Pipeline_v2 |
-| :--: | --------- | --------- | ----------- |----------- |----------- |----------- |
-|![](../../Docs/Images/20230401/still_0.01_25600/original.png)|![](../../Docs/Images/20230401/still_0.01_25600/bm4d.png)|![](../../Docs/Images/20230401/still_0.01_25600/hdr+.png)|![](../../Docs/Images/20230401/still_0.01_25600/maskdngan.png)|![](../../Docs/Images/20230401/still_0.01_25600/hrnet.png)|![](../../Docs/Images/20230401/块剔除实验对比/0.01/原方法.png)|![](../../Docs/Images/20230401/still_0.01_25600/deepflow.png)|
 
 **结果**
 
