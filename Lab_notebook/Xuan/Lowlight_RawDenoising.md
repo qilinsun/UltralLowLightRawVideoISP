@@ -1,6 +1,16 @@
 
 ## 工作进程：
 
+### 2023.5.15-19
+
++ 检索并阅读了相关文献
+
+[Patch Matching for Image Denoising UsingNeighborhood-Based Collaborative Filtering](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7569008)
+
+[Patch Craft: Video Denoising by Deep Modeling and Patch Matching](https://openaccess.thecvf.com/content/ICCV2021/papers/Vaksman_Patch_Craft_Video_Denoising_by_Deep_Modeling_and_Patch_Matching_ICCV_2021_paper.pdf)
+
+基于块匹配的低光度图像对融合方法
+
 ### 2023.4.17-4.29
 
 + patch match方法是基于相邻随机采样和传播来快速找到原图所有patch与目标图patch间的对应关系，从而基于此对图像进行重构。在高噪声情况下不是很适用，很难重构出。
