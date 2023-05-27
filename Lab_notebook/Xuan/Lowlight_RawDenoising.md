@@ -3,7 +3,7 @@
 
 ### 2023.5.22-5.26
 
-+ 利用卷积响应进行块匹配，code
++ 利用卷积响应进行块匹配，[code](https://github.com/qilinsun/UltralLowLightRawVideoISP/tree/main/patchmatch_conv)
   + 先设定了一个卷积核
   + 设定了在参考图上的局部区域，在该区域内搜索块
   + 将当前块与搜索出的所有块都与卷积核进行卷积，然后对卷积后的特征进行相似度计算（余弦相似度）
