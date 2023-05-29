@@ -3,31 +3,6 @@
 
 ### 2023.5.29
 
-+ Deepflow部分
-  + 先将Raw图像进行下采样(将四个通道RGGB进行平均)，得到一组下采样图像
-  + 然后利用deepflow算法(调用的opencv里的deepflow函数)，计算相邻帧(前一帧与后一帧之间的光流图)
-  + 然后后一帧根据光流图进行warp得到对齐图像
-
-| Ori_Downsample  | ![](../../Docs/Images/230529/deepflow/ori_downsample.png) |
-| :-------------: | ------------------------------------------------------------ |
-|     Flowmap     | ![](../../Docs/Images/230529/deepflow/flow_map.png)     |
-| Alignment_image | ![](../../Docs/Images/230529/deepflow/Alignment.png)    |
-
-Original_downsample0和Original_downsample1计算出的光流图为Flow_map0_1, warp的图像为Alignment0_1
-
-Original_downsample1和Original_downsample2计算出的光流图为Flow_map1_2, warp的图像为Alignment1_2
-
-Original_downsample2和Original_downsample3计算出的光流图为Flow_map2_3, warp的图像为Alignment2_3
-
-从alignment2_3图中可以看出，会稍微存在一些对齐不准的情况，且这种情况在不同的图像上错误程度不一样。在有些相邻图位移仍然较大，在这种情况下，错误估计要严重些。在位移相对较小的相邻图像上，无特别明显的错误估计。
-
-+ 计算中间帧位移并进行图像对齐
-  + 利用deepflow方法，计算出相邻帧的光流
-  + 根据计算出的帧间光流计算出位移向量
-  + 计算中间帧相对于第一帧的位移向量 
-  + 计算每一帧相对于中间帧的位移向量
-  + 对齐图像
-
 ------
 
 ### 2023.5.22-5.26
