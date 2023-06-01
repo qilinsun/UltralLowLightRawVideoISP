@@ -531,79 +531,11 @@ class LLR2V(torch.nn.Module):
     def forward(self, input): # shape BS,bs,h,w
         singleBurst = input[0].numpy()
         burstSize,h,w = singleBurst.shape
-        #referenceImg = singleBurst[0,:,:] # [h,w] 
-        #alternateImgs = singleBurst[1:,:,:] # [bs-1,h,w]
-        
-        ref_image = singleBurst[0]
-        enhance_ref = vevid_simple(singleBurst[0] / 16383, G=0.5, bais=0.6)
-        enhance_ref = ((enhance_ref - enhance_ref.min()) / (enhance_ref.max() - enhance_ref.min())) * 16383.
-
-        p_size = 3
-        itr = 1
-        img_match = []
-        enhanceimg_patch = []
-
-        deblurimage = singleBurst[0:16, :, :]
-        for i in range(deblurimage.shape[0] - 1):
-            img_ori = deblurimage[0]
-            img = vevid_simple(img_ori / 16383, G=0.5, bais=0.6)
-            img = ((img - img.min()) / (img.max() - img.min())) * 16383.
-            ref_ori = deblurimage[i + 1]
-            ref = vevid_simple(ref_ori / 16383, G=0.5, bais=0.6)
-            ref = ((ref - ref.min()) / (ref.max() - ref.min())) * 16383.
-            f, dist, score_list = NNS(img, ref, p_size, itr)
-            img_recon = reconstruction(f, img_ori, ref_ori)
-            img_match.append(img_recon)
-            enhanceimg_recon = reconstruction(f, img, ref)
-            enhanceimg_patch.append(enhanceimg_recon)
-
-        img_match_array = np.array(img_match)
-        enhanceimg_patch_array = np.array(enhanceimg_patch)
-
-        referenceImg = ref_image
-        alternateImgs = img_match_array
-
-        # 设定好所有和patch空间和MV空间
-        tileSize = 2*self.mbSize
-        refTiles = getTiles(referenceImg, tileSize, tileSize // 2)
-        alignedTiles = np.empty(((len(alternateImgs) + 1,) + refTiles.shape), dtype=refTiles.dtype)
-        alignedTiles[0] = refTiles
-
-        for i, alternateImage in enumerate(alternateImgs):
-            alignedTile = getTiles(alternateImage, tileSize, tileSize // 2)
-            alignedTiles[i + 1, ...] = alignedTile
-
-        enhance_referenceImg = enhance_ref
-        enhance_alternateImgs = enhanceimg_patch_array
-
-        enhance_refTiles = getTiles(enhance_referenceImg, tileSize, tileSize // 2)
-        enhance_alignedTiles = np.empty(((len(enhance_alternateImgs) + 1,) + refTiles.shape), dtype=refTiles.dtype)
-        enhance_alignedTiles[0] = enhance_refTiles
-
-        for i, alternateImage in enumerate(enhance_alternateImgs):
-            enhance_alignedTile = getTiles(alternateImage, tileSize, tileSize // 2)
-            enhance_alignedTiles[i+1, ...] = enhance_alignedTile
-
-        Step2_Blk_Size = 40
-        Step2_Blk_Step = 20
-        (height, width) = ref_image.shape
-        block_Size = Step2_Blk_Size
-        blk_step = Step2_Blk_Step
-        Width_num = (width - block_Size) / blk_step
-        Height_num = (height - block_Size) / blk_step
-        for h in range(int(Height_num+1)):
-            for w in range(int(Width_num+1)):
-                m_blockpoint = Locate_blk(h, w, blk_step, block_Size, height, width)
-                Similar_Blks, Similar_Imgs, Positions, Count = Step2_fast_match(enhance_ref/16383.*255., ref_image/16383.*255., m_blockpoint)
-                sim_img = alignedTiles[:, h, w, ...] / 16383. * 255.
-                sim_enhanceimg = enhance_alignedTiles[:, h, w, ...] / 16383. * 255.
-                img_concat = np.concatenate([sim_img, Similar_Imgs], axis=0)
-                enhanceimg_concat = np.concatenate([sim_enhanceimg, Similar_Blks], axis=0)
-                simimg, wiener_weight = Step2_3DFiltering(enhanceimg_concat, img_concat)
-                alignedTiles[:, h, w, ...] = simimg[0:len(deblurimage), ...] / 255. * 16383.
-        
+        referenceImg = singleBurst[0,:,:] # [h,w] 
+        alternateImgs = singleBurst[1:,:,:] # [bs-1,h,w]
+      
         # Hdrplus pipeline
-        # motionVectors, alignedTiles = alignHdrplus(referenceImg,alternateImgs,self.mbSize)
+        motionVectors, alignedTiles = alignHdrplus(referenceImg,alternateImgs,self.mbSize)
         
         mergedImage = mergeHdrplus(referenceImg, alignedTiles, self.padding, 
                                    self.lambdaS, self.lambdaR, self.params, self.options)
