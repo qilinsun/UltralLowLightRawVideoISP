@@ -48,9 +48,9 @@ class BM4DProfile:
     step_ht = (3, 3, 3)  # sliding step to process every next reference block
     max_stack_size_ht = 16  # maximum number of similar blocks (maximum size of the 3rd dimension of a 3D array)
     search_window_ht = (7, 7, 7)  # half side length of the search neighborhood for full-search block-matching (BM)
-    tau_match = 2000 # 2.9527 # 2.9527  # threshold for the block-distance (d-distance)
+    tau_match = 200000 # 2.9527 # 2.9527  # threshold for the block-distance (d-distance)
 
-    lambda_thr = 0.001 # 0.1 # 1.0
+    lambda_thr = None # 0.1 # 1.0
     mu2 = None
     lambda_thr_re = None
     mu2_re = None
@@ -62,7 +62,7 @@ class BM4DProfile:
     step_wiener = (3, 3, 3)
     max_stack_size_wiener = 32
     search_window_wiener = (7, 7, 7)
-    tau_match_wiener = 500 # 0.7689 # 0.7689
+    tau_match_wiener = 50000 # 0.7689 # 0.7689
     beta_wiener = 2.0
     dec_level = 0  # dec. levels of the dyadic wavelet 2D transform for blocks
     #  (0 means full decomposition, higher values decrease the dec. number)
