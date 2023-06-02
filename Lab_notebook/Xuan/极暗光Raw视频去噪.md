@@ -1,0 +1,264 @@
+
+
+## 极暗光Raw视频去噪
+
+### Final Goal
+
+在极暗光环境下(lux: 0.1, 0.01和0.001)实现实时的对raw视频的去噪
+
+### Idea
+
+夜景视频拍摄：深度学习，基于多帧融合
+
+深度学习：可解释性差，泛化性能差
+
+基于多帧融合的方法
+
+FIFO
+
+运动模糊
+
+高噪声
+
+由于目前深度学习方法不仅可解释性差，且泛化性能不好。目前经常提及的夜景拍摄会使用多帧融合思想实现去噪，先对图像进行匹配对齐，然后融合实现去噪效果。由于夜景视频中光照条件不足，且存在位移，所以需要先对视频序列图像进行帧间匹配对齐。其次，在视频中会由于运动导致模糊的存在。
+
+------
+
+### To do list 2023.5.29
+
+- [x] 噪声估计
+  + Imatest
+  + 公式：
+
++ 图像数据拍摄
+
+  - [x] 0.1 静态和动态Raw视频序列
+
+  - [x] 0.01 静态和动态Raw视频序列
+
+  - [ ] 0.001 静态和动态Raw视频序列
+
+- [x] FIFO结构 
+
++ 单帧图像处理
+  - [x] 帧内图像去模糊
+  - [x] 使用BM3D硬阈值方法先对sensor的噪声进行去噪
+
+- [ ] 帧间匹配
+- [x] 将匹配完的图像进行堆叠，使用BM4D方法在进行去噪
+- [ ] ISP调优
+
+------
+
+- [x] 运动模糊，利用帧间关系，ESTRNN方法 (训练数据是通过rgb转换成raw图做的)
+  + 制作训练数据，[code]()
+  + ESTRNN，[code]()
+
+------
+
+### Pipeline 2023.5.29
+
+<img src="/Users/xuanzhu/Documents/CUHKSZ/update_code/Note/Images/0529_pipeline.png" alt=" " style="zoom:20%;" />
+
+### 根据Pipeline每一步的实验结果
+
+#### BM4D
+
++ 说明
+
++ 代码
+
+  + [bm4d]()
+
++ 参数的设置
+
+  + 输入：16张原始Raw图像堆叠的三维图，size (h, w, 16)，第一帧为当前帧
+  + 将输入的数据+3/8开根号
+  + 噪声估计：利用的iccv的噪声估计算法，估计堆叠的所有图像的噪声方差
+  + 硬阈值变换：bior1.5，块：4 * 4 * 4，搜索步长：3 * 3 * 3，搜索窗口： 7 * 7 * 7，块的相似性阈值：200000，数量：16
+  + 维纳协同滤波: dct，块：4 * 4 * 4，搜索步长：3 * 3 * 3，搜索窗口： 7 * 7 * 7，块的相似性阈值：50000，数量：32
+  + 输出：输出结果，图像先平方-3/8后输出
+
+  Ps: 以上这些均分通道过一遍
+
++ 实验结果
+
+**0.1 静态**
+
+|                        Orignial image                        |                             BM4D                             |                             HDR+                             |                          Maskdngan                           |                            Hrnet                             |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+| ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/still_2500_0.1/original.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/still_2500_0.1/BM4D.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/still_2500_0.1/hdr+.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/still_2500_0.1/maskdngan.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/still_2500_0.1/hrnet.png) |
+
+**0.1 动态**
+
+|                        Orignial image                        |                             BM4D                             |                             HDR+                             |                          Maskdngan                           |                            Hrnet                             |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+| ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/motion_2500_0.1/original.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/motion_2500_0.1/bm4d.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/motion_2500_0.1/hdr+.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/motion_2500_0.1/maskdngan.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/motion_2500_0.1/hrnet.png) |
+
+**0. 01 静态**
+
+|                        Orignial image                        |                             BM4D                             |                             HDR+                             |                          Maskdngan                           |                            Hrnet                             |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+| ![](/Users/xuanzhu/Desktop/实验结果/20230401/still_0.01_25600/original.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/still_0.01_25600/bm4d.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/still_0.01_25600/hdr+.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/still_0.01_25600/maskdngan.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/still_0.01_25600/hrnet.png) |
+
+**0. 01 动态**
+
+|                        Orignial image                        |                             BM4D                             |                             HDR+                             |                          Maskdngan                           |                            Hrnet                             |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+| ![](/Users/xuanzhu/Desktop/实验结果/20230401/motion_0.01_51200/original.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/motion_0.01_51200/bm4d.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/motion_0.01_51200/hdr+.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/motion_0.01_51200/maskdngan.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/motion_0.01_51200/hrnet.png) |
+
+------
+
+#### Pre-processing
+
++ 说明
+
+  + 将镜头盖住，连续拍摄多帧图像，然后对这一系列图像平均，估计传感器噪声
+
+  + 然后将估计的传感器噪声和极暗光下拍的图像输入到bm3d硬阈值方法中
+
+  + 在增加了块剔除方法后，在原本的bm3d硬阈值方法中找到一定数量的块后，把不符合要求的块去掉，其余块做硬阈值滤波去噪
+
+  + 块去除方法
+
+    + 先将图像进行傅立叶变换，并将低频分量移到频域图像的中心位置
+
+    + 获取高频信息：(1) 生成了圆形滤波器，圆内值为0，其余部分为1 (半径为4)
+
+      ​						   (2) 利用圆形滤波器将第一步中频域图的低频信息过滤掉
+
+    + 得到高频分量后并做了一个平均
+
+    + 然后将其排序 (由高到低)，获取其索引值
+
+    + 然后根据索引值，取前几位的图像和对应位置坐标
+
++ 代码
+
+  + 噪声估计，[code]()
+  + BM3D硬阈值方法去除sensor噪声, [code]()
+  + 统计图像块的低频和高频信息(使用低通滤波和高通滤波实现)，将低频信息少的图像块扔掉，其余部分进行滤波去噪, [code]()
+
++ 参数的设置
+
+  + 单独BM3D硬阈值预处理方法
+    + 块: 8 * 8, 搜索步长: 3 * 3, 块数: 16, 搜索区域: 19 * 19, 相似块阈值: 50000, 硬阈值去噪的阈值: 自动调整
+
+  + BM3D硬阈值结合剔除块处理方法 (设定20块，扣除4块高频分量少的)
+    + 块: 8 * 8, 搜索步长: 3 * 3, 块数: 16, 搜索区域: 19 * 19, 相似块阈值: 500000, 硬阈值去噪的阈值: 2.7
+
++ 实验结果
+
+  + bm3d预处理结果
+
+  **0.1 静态**
+
+  |                        Orignial image                        |                      Predenoising image                      |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/still_2500_0.1/original.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.1still_2500.png) |
+
+  **0.1 动态**
+
+  |                        Orignial image                        |                      Predenoising image                      |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/motion_2500_0.1/original.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.1motion_2500.png) |
+
+  **0.01 静态**
+
+  |                        Orignial image                        |                      Predenoising image                      |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![](/Users/xuanzhu/Desktop/实验结果/20230401/still_0.01_25600/original.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.01still_25600.png) |
+
+  **0.01 动态**
+
+  |                        Orignial image                        |                      Predenoising image                      |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![](/Users/xuanzhu/Desktop/实验结果/20230401/motion_0.01_51200/original.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.01motion_51200.png) |
+
+  + 使用灰度图像测试提取高频低频部分
+
+  |                        Original image                        |                     High frequency image                     |                     Low frequency image                      |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/块去除方法测试/图像频率信息/img_gray.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/块去除方法测试/图像频率信息/high_freq_img.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/块去除方法测试/图像频率信息/low_freq_img.png) |
+
+  + 使用模糊的灰度图像进行块剔除测试
+
+  |                         Sharp image                          |                          Blur image                          |                         Noisy image                          |                          BM3D_image                          |                        NewBM3D_image                         |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/块去除方法测试/去除块bm3d_hard/img_sharp.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/块去除方法测试/去除块bm3d_hard/blur_img.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/块去除方法测试/去除块bm3d_hard/noise_blur.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/块去除方法测试/去除块bm3d_hard/y_basic_blur_1.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/块去除方法测试/去除块bm3d_hard/y_basic_deblur.png) |
+
+  + 拍摄图像的对比结果	
+
+  **0.1 动态**
+
+  |                        Original image                        |                          BM3D Image                          |                       BM3D_Block Image                       |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/motion_2500_0.1/original.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.1motion_2500.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_block/predenoisingv1_motion_0.1_2500.png) |
+
+  **0.01 动态**
+
+  |                        Original image                        |                          BM3D Image                          |                       BM3D_Block Image                       |
+  | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+  | ![](/Users/xuanzhu/Desktop/实验结果/20230401/motion_0.01_51200/original.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.01motion_51200.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_block/predenoisingv1.png) |
+
+------
+
+#### ESTRNN 
+
++ 方法
+
+<img src="/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/Pipeline/ESTRNN.png" style="zoom: 50%;" />
+
++ 数据集
+
+|                            RGB_GT                            |                            Raw_GT                            |                           RGB_Blur                           |                           Raw_Blur                           |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+| ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/ESTRNN结果/RGB_GT.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/ESTRNN结果/Raw_GT.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/ESTRNN结果/RGB_Blur.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/ESTRNN结果/Raw_Blur.png) |
+
++ 实验结果
+
+|                              GT                              |                            Input                             |                            Output                            |
+| :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
+| ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/ESTRNN结果/Test_GT.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/ESTRNN结果/Test_raw_noise.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/ESTRNN结果/Test_output.png) |
+
+------
+
+#### Patch match
+
++ 说明
+
+  + Deepflow部分. 
+    + 先将Raw图像进行下采样(将四个通道RGGB进行平均)，得到一组下采样图像
+    + 将图像变换到0-255之间，然后利用deepflow算法(调用的opencv里的deepflow函数)，计算相邻帧(前一帧与后一帧之间的光流图)
+    + 然后后一帧根据光流图进行warp得到对齐图像
+
+  | Ori_Downsample  | ![]() |
+  | :-------------: | ----- |
+  |     Flowmap     | ![]() |
+  | Alignment_image | ![]() |
+
+  ![]()
+
+  + 计算中间帧位移并进行图像对齐
+    + 利用deepflow方法，计算出相邻帧的光流
+    + 根据计算出的帧间光流计算出位移向量
+    + 计算中间帧相对于第一帧的位移向量 
+    + 计算每一帧相对于中间帧的位移向量
+    + 对齐图像
+
++ 代码
+  + [Deepflow]()
++ 参数的设置
+  + 原库函数
++ 实验结果
+
+------
+
+#### 目前的整体Pipeline结果
+
+
+
+
+
+
+
