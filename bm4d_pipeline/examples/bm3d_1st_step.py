@@ -50,8 +50,8 @@ def bm3d_1st_step(sigma, img_noisy, nHard, kHard, NHard, pHard, lambdaHard3D, ta
         fre_all_patches = bior_2d_forward(all_patches)
 
     acc_pointer = 0
-    positions = np.zeros((ri_rj_N__ni_nj.shape[0], ri_rj_N__ni_nj.shape[1], 12, 2))
-    new_group = np.zeros((12, 8, 8))
+    positions = np.zeros((ri_rj_N__ni_nj.shape[0], ri_rj_N__ni_nj.shape[1], 16, 2))
+    new_group = np.zeros((16, 8, 8))
     for i_r in row_ind:
         for j_r in column_ind:
             nSx_r = threshold_count[i_r, j_r]
@@ -59,40 +59,41 @@ def bm3d_1st_step(sigma, img_noisy, nHard, kHard, NHard, pHard, lambdaHard3D, ta
             # reverse dct
             re_group_3d = bior_2d_reverse(group_3D.transpose((2, 0, 1)))
             num, ph, pw = re_group_3d.shape
-            mask_0 = np.ones((ph, pw, 2))
-            mask_0[int(ph / 2) - 2:int(ph / 2) + 2, int(pw / 2) - 2:int(pw / 2) + 2] = 0
-
-            mask_1 = np.zeros((ph, pw, 2))
-            mask_1[int(ph / 2) - 2:int(ph / 2) + 2, int(pw / 2) - 2:int(pw / 2) + 2] = 1
-            
-            # 计算出所有相似图块的低频分量，去除低频分量最高(高频分量最少)的几个图块，其余图块做硬阈值处理及后续的聚合，小波变换处理的
-#             cA_list = []
-#             for i in range(num):
-#                 cA, (cH, cV, cD) = pywt.dwt2(re_group_3d[i], 'haar')
-#                 cA_mean = np.mean(cA)
-#                 cA_list.append(cA_mean)
-#             sort_ind = np.argsort(cA_list)
-#             nSx_r = nSx_r - int(num / 4)
-            
-            # 将傅里叶变换移位后，将中心区域的低频信息去除，保留高频信息，将高频信息排序，将高频分量少的块去掉
-            radius_ratio = 2.0
+	    # 去除块处理
+            cA_list = []
+            radius_ratio = 0.6
             for i in range(num):
                 f = np.fft.fftn(re_group_3d[i])
+                # 计算高频分量
                 fshift = np.fft.fftshift(f)
                 hight_parts_fshift = filter_low(fshift.copy(), re_group_3d[i], radius_ratio=radius_ratio)
-                high_parts_img = ifft(hight_parts_fshift)
-                img_new_high = (high_parts_img - np.amin(high_parts_img) + 0.00001) / (
-                        np.amax(high_parts_img) - np.amin(high_parts_img) + 0.00001)
-                cA_mean = np.mean(img_new_high * 16383)
+                # high_parts_img = ifft(hight_parts_fshift)
+                # img_new_high = (high_parts_img - np.amin(high_parts_img) + 0.00001) / (
+                #         np.amax(high_parts_img) - np.amin(high_parts_img) + 0.00001)
+                # cA_mean = np.mean(img_new_high * 16383)
+                cA_mean = np.mean(hight_parts_fshift)
+
+                # cA, (cH, cV, cD) = pywt.dwt2(re_group_3d[i], 'haar')
+                # cA_mean = np.mean(cA)
                 cA_list.append(cA_mean)
-            sort_ind = np.argsort(cA_list)
-            nSx_r = nSx_r - int(num / 4)
-            
-            # 去除图块，重新对应图块及其位置
+            sort_ind = np.argsort(-np.array(cA_list))
+            nSx_r = nSx_r - int(num / 5)
+
+            # re_group_3d = re_group_3d.tolist()
+            # position = ri_rj_N__ni_nj[i_r, j_r].tolist()
+            # nSx_r = nSx_r - int(num/4)
+            # positions = positions.tolist()
             for j in range(nSx_r):
-               
+                # re_group_3d.pop(sort_ind[-1])
+                # position.pop(sort_ind[-1])
                 new_group[j, :, :] = re_group_3d[sort_ind[j], :, :]
-                positions[i_r, j_r, j, :] = ri_rj_N__ni_nj[i_r, j_r, sort_ind[j], :]
+                p = ri_rj_N__ni_nj[i_r, j_r, sort_ind[j], :]
+                positions[i_r, j_r, j, :] = p
+
+                # re_group_3d[sort_ind[-j-1], :,:] = np.zeros((ph, pw))
+            # re_group_3d = np.array(re_group_3d)
+            # position = np.array(position)
+            # positions[i_r, j_r, :, :] = position
 
             group_3D = bior_2d_forward(new_group)
             group_3D, weight = ht_filtering_hadamard(group_3D, sigma, lambdaHard3D, not useSD)
@@ -130,6 +131,7 @@ def bm3d_1st_step(sigma, img_noisy, nHard, kHard, NHard, pHard, lambdaHard3D, ta
     for i_r in row_ind:
         for j_r in column_ind:
             nSx_r = threshold_count[i_r, j_r]-4
+            # nSx_r = threshold_count[i_r, j_r]
             # N_ni_nj = ri_rj_N__ni_nj[i_r, j_r]
             N_ni_nj = positions[i_r, j_r]
             group_3D = group_3D_table[acc_pointer:acc_pointer + nSx_r]
@@ -142,5 +144,33 @@ def bm3d_1st_step(sigma, img_noisy, nHard, kHard, NHard, pHard, lambdaHard3D, ta
                 numerator[int(ni):int(ni) + kHard, int(nj):int(nj) + kHard] += patch * kaiserWindow * weight
                 denominator[int(ni):int(ni) + kHard, int(nj):int(nj) + kHard] += kaiserWindow * weight
 
-    img_basic = numerator / (denominator)
+    img_basic = numerator / (denominator+1e-6)
     return img_basic
+
+
+if __name__ == '__main__':
+    from utils import add_gaussian_noise, symetrize
+
+    # <hyper parameter> -------------------------------------------------------------------------------
+    sigma = 20
+
+    nHard = 16
+    kHard = 8
+    NHard = 16
+    pHard = 3
+    lambdaHard3D = 2.7  # ! Threshold for Hard Thresholding
+    tauMatchHard = 2500 if sigma < 35 else 5000  # ! threshold determinates similarity between patches
+    useSD_h = False
+    tau_2D_hard = 'BIOR'
+    # <\ hyper parameter> -----------------------------------------------------------------------------
+
+    img = cv2.imread('/home/cuhksz-aci-03/Documents/UltralLowLightRawVideoISP-main/results/20230401/motion_0.01_51200/bm3d_bm4d.png', cv2.IMREAD_GRAYSCALE)
+    img_noisy = add_gaussian_noise(img, sigma)
+    # img_noisy = cv2.imread('matlab_officialfg_compare/noisy_image.png', cv2.IMREAD_GRAYSCALE)
+
+    img_noisy_p = symetrize(img_noisy, nHard)
+    img_basic = bm3d_1st_step(sigma, img_noisy_p, nHard, kHard, NHard, pHard, lambdaHard3D, tauMatchHard, useSD_h,
+                              tau_2D_hard)
+    img_basic = img_basic[nHard: -nHard, nHard: -nHard]
+
+    cv2.imwrite('y_basic.png', img_basic.astype(np.uint8))
