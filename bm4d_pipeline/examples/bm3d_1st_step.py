@@ -78,23 +78,14 @@ def bm3d_1st_step(sigma, img_noisy, nHard, kHard, NHard, pHard, lambdaHard3D, ta
                 cA_list.append(cA_mean)
             sort_ind = np.argsort(-np.array(cA_list))
             nSx_r = nSx_r - int(num / 5)
-
-            # re_group_3d = re_group_3d.tolist()
-            # position = ri_rj_N__ni_nj[i_r, j_r].tolist()
-            # nSx_r = nSx_r - int(num/4)
-            # positions = positions.tolist()
+		
             for j in range(nSx_r):
                 # re_group_3d.pop(sort_ind[-1])
                 # position.pop(sort_ind[-1])
                 new_group[j, :, :] = re_group_3d[sort_ind[j], :, :]
                 p = ri_rj_N__ni_nj[i_r, j_r, sort_ind[j], :]
                 positions[i_r, j_r, j, :] = p
-
-                # re_group_3d[sort_ind[-j-1], :,:] = np.zeros((ph, pw))
-            # re_group_3d = np.array(re_group_3d)
-            # position = np.array(position)
-            # positions[i_r, j_r, :, :] = position
-
+		
             group_3D = bior_2d_forward(new_group)
             group_3D, weight = ht_filtering_hadamard(group_3D, sigma, lambdaHard3D, not useSD)
             # group_3D = group_3D.transpose((2, 0, 1))
