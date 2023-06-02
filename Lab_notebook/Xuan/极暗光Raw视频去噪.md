@@ -49,8 +49,8 @@ FIFO
 ------
 
 - [x] 运动模糊，利用帧间关系，ESTRNN方法 (训练数据是通过rgb转换成raw图做的)
-  + 制作训练数据，[code]()
-  + ESTRNN，[code]()
+  + 制作训练数据，[code](https://github.com/swz30/CycleISP)
+  + ESTRNN，[code](https://github.com/zzh-tech/ESTRNN)
 
 ------
 
