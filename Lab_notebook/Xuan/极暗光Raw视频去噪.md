@@ -58,7 +58,7 @@ FIFO
 
 ### Pipeline 2023.5.29
 
-<img src="/Users/xuanzhu/Documents/CUHKSZ/update_code/Note/Images/0529_pipeline.png" alt=" " style="zoom:20%;" />
+<img src="../Docs/Images/230529/Pipeline/0529_pipeline.png" alt=" " style="zoom:20%;" />
 
 ### 根据Pipeline每一步的实验结果
 
@@ -87,25 +87,25 @@ FIFO
 
 |                        Orignial image                        |                             BM4D                             |                             HDR+                             |                          Maskdngan                           |                            Hrnet                             |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/still_2500_0.1/original.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/still_2500_0.1/BM4D.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/still_2500_0.1/hdr+.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/still_2500_0.1/maskdngan.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/still_2500_0.1/hrnet.png) |
+| ![](../Docs/Images/20230401/0.1_2500/still_2500_0.1/original.png) | ![](../Docs/Images/20230401/0.1_2500/still_2500_0.1/BM4D.png) | ![](../Docs/Images/20230401/0.1_2500/still_2500_0.1/hdr+.png) | ![](../Docs/Images/20230401/0.1_2500/still_2500_0.1/maskdngan.png) | ![](../Docs/Images/20230401/0.1_2500/still_2500_0.1/hrnet.png) |
 
 **0.1 动态**
 
 |                        Orignial image                        |                             BM4D                             |                             HDR+                             |                          Maskdngan                           |                            Hrnet                             |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/motion_2500_0.1/original.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/motion_2500_0.1/bm4d.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/motion_2500_0.1/hdr+.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/motion_2500_0.1/maskdngan.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/motion_2500_0.1/hrnet.png) |
+| ![](../Docs/Images/20230401/0.1_2500/motion_2500_0.1/original.png) | ![](../Docs/Images/20230401/0.1_2500/motion_2500_0.1/bm4d.png) | ![](../Docs/Images/20230401/0.1_2500/motion_2500_0.1/hdr+.png) | ![]../Docs/Images/20230401/0.1_2500/motion_2500_0.1/maskdngan.png) | ![](../Docs/Images/20230401/0.1_2500/motion_2500_0.1/hrnet.png) |
 
 **0. 01 静态**
 
 |                        Orignial image                        |                             BM4D                             |                             HDR+                             |                          Maskdngan                           |                            Hrnet                             |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![](/Users/xuanzhu/Desktop/实验结果/20230401/still_0.01_25600/original.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/still_0.01_25600/bm4d.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/still_0.01_25600/hdr+.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/still_0.01_25600/maskdngan.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/still_0.01_25600/hrnet.png) |
+| ![](../Docs/Images/20230401/still_0.01_25600/original.png) | ![](../Docs/Images/20230401/still_0.01_25600/bm4d.png) | ![](../Docs/Images/20230401/still_0.01_25600/hdr+.png) | ![](../Docs/Images/20230401/still_0.01_25600/maskdngan.png) | ![](../Docs/Images/20230401/still_0.01_25600/hrnet.png) |
 
 **0. 01 动态**
 
 |                        Orignial image                        |                             BM4D                             |                             HDR+                             |                          Maskdngan                           |                            Hrnet                             |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![](/Users/xuanzhu/Desktop/实验结果/20230401/motion_0.01_51200/original.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/motion_0.01_51200/bm4d.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/motion_0.01_51200/hdr+.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/motion_0.01_51200/maskdngan.png) | ![](/Users/xuanzhu/Desktop/实验结果/20230401/motion_0.01_51200/hrnet.png) |
+| ![](../Docs/Images/20230401/motion_0.01_51200/original.png) | ![](../Docs/Images/20230401/motion_0.01_51200/bm4d.png) | ![](../Docs/Images/20230401/motion_0.01_51200/hdr+.png) | ![](../Docs/Images/20230401/motion_0.01_51200/maskdngan.png) | ![](../Docs/Images/20230401/motion_0.01_51200/hrnet.png) |
 
 ------
 
@@ -155,37 +155,37 @@ FIFO
 
   |                        Orignial image                        |                      Predenoising image                      |
   | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/still_2500_0.1/original.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.1still_2500.png) |
+  | ![](../Docs/Images/20230401/0.1_2500/still_2500_0.1/original.png) | ![](../Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.1still_2500.png) |
 
   **0.1 动态**
 
   |                        Orignial image                        |                      Predenoising image                      |
   | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/motion_2500_0.1/original.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.1motion_2500.png) |
+  | ![](../Docs/Images/20230401/0.1_2500/motion_2500_0.1/original.png) | ![](../Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.1motion_2500.png) |
 
   **0.01 静态**
 
   |                        Orignial image                        |                      Predenoising image                      |
   | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | ![](/Users/xuanzhu/Desktop/实验结果/20230401/still_0.01_25600/original.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.01still_25600.png) |
+  | ![](../Docs/Images/20230401/still_0.01_25600/original.png) | ![](../Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.01still_25600.png) |
 
   **0.01 动态**
 
   |                        Orignial image                        |                      Predenoising image                      |
   | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | ![](/Users/xuanzhu/Desktop/实验结果/20230401/motion_0.01_51200/original.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.01motion_51200.png) |
+  | ![](../Docs/Images/20230401/motion_0.01_51200/original.png) | ![](../Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.01motion_51200.png) |
 
   + 使用灰度图像测试提取高频低频部分
 
   |                        Original image                        |                     High frequency image                     |                     Low frequency image                      |
   | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/块去除方法测试/图像频率信息/img_gray.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/块去除方法测试/图像频率信息/high_freq_img.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/块去除方法测试/图像频率信息/low_freq_img.png) |
+  | ![](../Docs/Images/230529/块去除方法测试/图像频率信息/img_gray.png) | ![](../Docs/Images/230529/块去除方法测试/图像频率信息/high_freq_img.png) | ![](../Docs/Images/230529/块去除方法测试/图像频率信息/low_freq_img.png) |
 
   + 使用模糊的灰度图像进行块剔除测试
 
   |                         Sharp image                          |                          Blur image                          |                         Noisy image                          |                          BM3D_image                          |                        NewBM3D_image                         |
   | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/块去除方法测试/去除块bm3d_hard/img_sharp.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/块去除方法测试/去除块bm3d_hard/blur_img.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/块去除方法测试/去除块bm3d_hard/noise_blur.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/块去除方法测试/去除块bm3d_hard/y_basic_blur_1.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/块去除方法测试/去除块bm3d_hard/y_basic_deblur.png) |
+  | ![](../Docs/Images/230529/块去除方法测试/去除块bm3d_hard/img_sharp.png) | ![](../Docs/Images/230529/块去除方法测试/去除块bm3d_hard/blur_img.png) | ![](../Docs/Images/230529/块去除方法测试/去除块bm3d_hard/noise_blur.png) | ![](../Docs/Images/230529/块去除方法测试/去除块bm3d_hard/y_basic_blur_1.png) | ![](../Docs/Images/230529/块去除方法测试/去除块bm3d_hard/y_basic_deblur.png) |
 
   + 拍摄图像的对比结果	
 
@@ -193,13 +193,13 @@ FIFO
 
   |                        Original image                        |                          BM3D Image                          |                       BM3D_Block Image                       |
   | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | ![](/Users/xuanzhu/Desktop/实验结果/20230401/0.1_2500/motion_2500_0.1/original.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.1motion_2500.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_block/predenoisingv1_motion_0.1_2500.png) |
+  | ![](../Docs/Images/20230401/0.1_2500/motion_2500_0.1/original.png) | ![](../Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.1motion_2500.png) | ![](../Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_block/predenoisingv1_motion_0.1_2500.png) |
 
   **0.01 动态**
 
   |                        Original image                        |                          BM3D Image                          |                       BM3D_Block Image                       |
   | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-  | ![](/Users/xuanzhu/Desktop/实验结果/20230401/motion_0.01_51200/original.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.01motion_51200.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_block/predenoisingv1.png) |
+  | ![](../Docs/Images/20230401/motion_0.01_51200/original.png) | ![](../Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_bm3d_hard/predenoise_0.01motion_51200.png) | ![](../Docs/Images/230529/bm3d硬阈值方法预处理结果/predenoising_block/predenoisingv1.png) |
 
 ------
 
@@ -207,19 +207,19 @@ FIFO
 
 + 方法
 
-<img src="/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/Pipeline/ESTRNN.png" style="zoom: 50%;" />
+<img src="../Docs/Images/230529/Pipeline/ESTRNN.png" style="zoom: 50%;" />
 
 + 数据集
 
 |                            RGB_GT                            |                            Raw_GT                            |                           RGB_Blur                           |                           Raw_Blur                           |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/ESTRNN结果/RGB_GT.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/ESTRNN结果/Raw_GT.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/ESTRNN结果/RGB_Blur.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/ESTRNN结果/Raw_Blur.png) |
+| ![](../Docs/Images/230529/ESTRNN结果/RGB_GT.png) | ![](../Docs/Images/230529/ESTRNN结果/Raw_GT.png) | ![](../Docs/Images/230529/ESTRNN结果/RGB_Blur.png) | ![](../Docs/Images/230529/ESTRNN结果/Raw_Blur.png) |
 
 + 实验结果
 
 |                              GT                              |                            Input                             |                            Output                            |
 | :----------------------------------------------------------: | :----------------------------------------------------------: | :----------------------------------------------------------: |
-| ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/ESTRNN结果/Test_GT.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/ESTRNN结果/Test_raw_noise.png) | ![](/Users/xuanzhu/Documents/CUHKSZ/update_code/Docs/Images/230529/ESTRNN结果/Test_output.png) |
+| ![](../Docs/Images/230529/ESTRNN结果/Test_GT.png) | ![](../Docs/Images/230529/ESTRNN结果/Test_raw_noise.png) | ![](../Docs/Images/230529/ESTRNN结果/Test_output.png) |
 
 ------
 
