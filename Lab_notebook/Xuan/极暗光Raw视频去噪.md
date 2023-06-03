@@ -224,19 +224,11 @@ FIFO
 #### Patch match
 
 + 说明
-
+![](../../Docs/Images/230529/Pipeline/Deepflow.png)
   + Deepflow部分. 
     + 先将Raw图像进行下采样(将四个通道RGGB进行平均)，得到一组下采样图像
-    + 将图像变换到0-255之间，然后利用deepflow算法(调用的opencv里的deepflow函数)，计算相邻帧(前一帧与后一帧之间的光流图)
+    + 利用deepflow算法(调用的opencv里的deepflow函数)，计算相邻帧(前一帧与后一帧之间的光流图)
     + 然后后一帧根据光流图进行warp得到对齐图像
-
-  | Ori_Downsample  | ![]() |
-  | :-------------: | ----- |
-  |     Flowmap     | ![]() |
-  | Alignment_image | ![]() |
-
-  ![]()
-
   + 计算中间帧位移并进行图像对齐
     + 利用deepflow方法，计算出相邻帧的光流
     + 根据计算出的帧间光流计算出位移向量
@@ -245,9 +237,21 @@ FIFO
     + 对齐图像
 
 + 代码
-  + [Deepflow]()
+  + [Deepflow](https://github.com/qilinsun/UltralLowLightRawVideoISP/blob/main/bm4d_pipeline/examples/test_raw.py)
 + 参数的设置
   + 原库函数
 + 实验结果
+   **降采样的第四帧和第五帧**
 
+|                        Downsample # 3                        |                        Downsample # 4                        |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
+| ![](../../Docs/Images/230529/deepflow/downsample3.png) | ![](../../Docs/Images/230529/deepflow/downsample4.png) |
+
+   **第四帧和第五帧之间的光流图**
+
+   ![](../../Docs/Images/230529/deepflow/flowmap34.png)
+
+   **第五帧向第四帧对齐的图片**
+
+   ![](../../Docs/Images/230529/deepflow/align_img34.png)
 ------
