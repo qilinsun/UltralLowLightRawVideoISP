@@ -21,7 +21,7 @@ def complexMultipleConjugate(complex1: np.ndarray, complex2: np.ndarray) -> np.n
 def complexModulus(complex1: np.ndarray) -> np.ndarray:
     re = complex1[:, :, 0]
     im = complex1[:, :, 1]
-    return np.sqrt(re**2 + im**2)
+    return np.sqrt(re ** 2 + im ** 2)
 
 
 def velocityFieldPhase(movedImage: np.ndarray, reference: np.ndarray, kSize: int) -> np.ndarray:
@@ -111,18 +111,54 @@ def blockMatching(kernel: np.ndarray, searchField: np.ndarray, kSize: int) -> tu
     return v, minDistance
 
 
+def interpolate(velocityField: np.ndarray) -> np.ndarray:
+    height, width = velocityField.shape[0], velocityField.shape[1]
+    for i in range(height):
+        for j in range(width):
+            if velocityField[i, j, 0] == -100 and velocityField[i, j, 1] == -100:
+                # upper left corner
+                if i == 0 and j == 0:
+                    velocityField[i, j, 0:2] = 1 / 2 * (velocityField[i + 1, j, 0:2] + velocityField[i, j + 1, 0:2])
+                # upper right corner
+                elif i == 0 and j == width - 1:
+                    velocityField[i, j, 0:2] = 1 / 2 * (velocityField[i + 1, j, 0:2] + velocityField[i, j - 1, 0:2])
+                # lower right corner
+                elif i == height - 1 and j == width - 1:
+                    velocityField[i, j, 0:2] = 1 / 2 * (velocityField[i - 1, j, 0:2] + velocityField[i, j - 1, 0:2])
+                # lower left corner
+                elif i == height - 1 and j == 0:
+                    velocityField[i, j, 0:2] = 1 / 2 * (velocityField[i - 1, j, 0:2] + velocityField[i, j + 1, 0:2])
+                # the top row
+                elif i == 0 and j != 0 and j != width - 1:
+                    velocityField[i, j, 0:2] = 1 / 3 * (velocityField[i + 1, j, 0:2] + velocityField[i, j - 1, 0:2] + velocityField[i, j + 1, 0:2])
+                # the bottom row
+                elif i == height - 1 and j != 0 and j != width - 1:
+                    velocityField[i, j, 0:2] = 1 / 3 * (velocityField[i - 1, j, 0:2] + velocityField[i, j - 1, 0:2] + velocityField[i, j + 1, 0:2])
+                # the first column
+                elif j == 0 and i != 0 and i != height - 1:
+                    velocityField[i, j, 0:2] = 1 / 3 * (velocityField[i - 1, j, 0:2] + velocityField[i + 1, j, 0:2] + velocityField[i, j + 1, 0:2])
+                # the most right column
+                elif j == width - 1 and i != 0 and i != height - 1:
+                    velocityField[i, j, 0:2] = 1 / 3 * (velocityField[i - 1, j, 0:2] + velocityField[i + 1, j, 0:2] + velocityField[i, j - 1, 0:2])
+                # common cases
+                velocityField[i, j, 0:2] = 1 / 4 * (velocityField[i - 1, j, 0:2] + velocityField[i + 1, j, 0:2] + velocityField[i, j + 1, 0:2] + velocityField[i, j - 1,  0:2])
+    return velocityField
+
+
 data = pd.read_csv('gsalesman_sig10.csv', header=None)
 kSize = 25
 data = data.values.reshape((288, 50, 352)).astype(np.float32)
-velocity = velocityFieldPhase(data[:, 43, :], data[:, 42, :], kSize)
+velocity = velocityFieldPhase(data[:, 14, :], data[:, 13, :], kSize).astype(np.float32)
+velocity = interpolate(velocity)
+velocity[:, :, 0] = cv2.medianBlur(velocity[:, :, 0], ksize=3)
+velocity[:, :, 1] = cv2.medianBlur(velocity[:, :, 1], ksize=3)
 validVelocity = velocity[velocity[:, :, 0] != -100, :]
 invalidVelocity = velocity[velocity[:, :, 0] == -100, :]
-plt.imshow(data[:, 43, :], cmap='gray')
+plt.imshow(data[:, 14, :], cmap='gray')
 plt.show()
-plt.imshow(data[:, 42, :], cmap='gray')
+plt.imshow(data[:, 13, :], cmap='gray')
 plt.quiver(validVelocity[:, 3] + kSize, validVelocity[:, 2] + kSize, validVelocity[:, 1], validVelocity[:, 0],
            angles='xy', scale=1, color='yellow', units='xy')
-plt.quiver(invalidVelocity[:, 3] + kSize, invalidVelocity[:, 2] + kSize, invalidVelocity[:, 1] * 0,
-           invalidVelocity[:, 0] * 0,
-           angles='xy', scale=1, color='red', units='xy')
+# plt.quiver(invalidVelocity[:, 3] + kSize, invalidVelocity[:, 2] + kSize, invalidVelocity[:, 1] * 0, invalidVelocity[:, 0] * 0, angles='xy', scale=1, color='red', units='xy')
 plt.show()
+
