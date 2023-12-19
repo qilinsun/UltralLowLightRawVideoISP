@@ -4,7 +4,12 @@ Date: 19/12/2023
 2. Verified block-matching method based on phase correlation with the video from Prof. Bihan Wen
 3. Researched noise modeling and calibration, as well as the k-sigma transform to regularize the distribution of pixels
 
+|MovedImage|ReferenceImage|
+|:----:|:-------:|
+|![the 30th frame](/Docs/Image_results/moved_frame_40.png)|![the 29th frame](/Docs/Image_results/reference_frame_29.png)|
+
+
  # todo
  1. Capture raw data ourselves and perform noise calibration accordingly
- 2. Test block-matching method with the raw data
- 3. Research sparse coding method and dictionary learning for denoising and block merging
+ 2. Test the block-matching method with the raw data
+ 3. Research sparse coding methods and dictionary learning for denoising and block merging
