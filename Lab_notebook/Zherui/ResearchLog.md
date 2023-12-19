@@ -11,7 +11,7 @@ Date: 19/12/2023
 
 
 ## The motion during a relatively long period (Phase Correlate & L2-norm Matching)
-|Moved Image|Reference Image (Phase Correlate)|Moved Image (L2-norm)|
+|Moved Image|Reference Image (Phase Correlate)|Reference Image (L2-norm)|
 |:-----:|:------:|:----:|
 |![the 45th_frame](/Docs/Image_results/moved_frame_45.png)|![the 40th_frame](/Docs/Image_results/reference_frame_40.png)|![L2](/Docs/Image_results/results_1219/moved_frame_45_L2.png)|
 
