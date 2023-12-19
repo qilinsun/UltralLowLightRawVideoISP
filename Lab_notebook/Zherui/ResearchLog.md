@@ -15,6 +15,9 @@ Date: 19/12/2023
 |:-----:|:------:|
 |![the 45th_frame](/Docs/Image_results/moved_frame_45.png)|![the 40th_frame](/Docs/Image_results/reference_frame_40.png)|
 
+## The pipeline of block-matching with phase correlation
+![the pipeline of block-matching](/Docs/Image_results/blockMatching.svg)
+
 
  # todo
  1. Capture raw data ourselves and perform noise calibration accordingly
