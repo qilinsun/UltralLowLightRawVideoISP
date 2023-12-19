@@ -4,9 +4,16 @@ Date: 19/12/2023
 2. Verified block-matching method based on phase correlation with the video from Prof. Bihan Wen
 3. Researched noise modeling and calibration, as well as the k-sigma transform to regularize the distribution of pixels
 
+## The motion between adjacent frames
 |MovedImage|ReferenceImage|
 |:----:|:-------:|
 |![the 30th frame](/Docs/Image_results/moved_frame_30.png)|![the 29th frame](/Docs/Image_results/reference_frame_29.png)|
+
+
+## The motion during a relatively long period
+|MovedImage|ReferenceImage|
+|:-----:|:------:|
+|![the 45th_frame](/Docs/Image_results/moved_frame_45.png)|![the 40th_frame](/Docs/Image_results/reference_frame_40.png)|
 
 
  # todo
