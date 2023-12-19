@@ -10,10 +10,10 @@ Date: 19/12/2023
 |![the 30th frame](/Docs/Image_results/moved_frame_30.png)|![the 29th frame](/Docs/Image_results/reference_frame_29.png)|
 
 
-## The motion during a relatively long period
-|MovedImage|ReferenceImage|
-|:-----:|:------:|
-|![the 45th_frame](/Docs/Image_results/moved_frame_45.png)|![the 40th_frame](/Docs/Image_results/reference_frame_40.png)|
+## The motion during a relatively long period (Phase Correlate & L2-norm Matching)
+|Moved Image|Reference Image (Phase Correlate)|Moved Image (L2-norm)|
+|:-----:|:------:|:----:|
+|![the 45th_frame](/Docs/Image_results/moved_frame_45.png)|![the 40th_frame](/Docs/Image_results/reference_frame_40.png)|![L2](/Docs/Image_results/results_1219/moved_frame_45_L2.png)|
 
 ## The pipeline of block-matching with phase correlation
 ![the pipeline of block-matching](/Docs/Image_results/blockMatching.svg)
