@@ -36,7 +36,7 @@ Date: 29/12/2023
 ## The motion detected between adjacent frames with and without gamma correction
 |Raw Image|Corrected Image|Motion(corrected)|Motion(uncorrected)|
 |:---:|:----:|:---:|:---:|
-
+|![](/Docs/Images_results/results1229/raw.png)|![](/Docs/Images_results/results1229/moved.png)|![](/Docs/Images_results/results1229/)|![](/Docs/Image_results/results1229/vector.png)|
 
 ## The results of noise calibration
 
