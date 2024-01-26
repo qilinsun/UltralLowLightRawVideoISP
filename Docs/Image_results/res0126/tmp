@@ -16,5 +16,5 @@
 
 ## PPCC
 1. R^2 = 0.989229, Gaussian Distribution, k = 69.4144, b = -0.7043
-2. R^2 = 
-3. R^2 = 0.99343144, Tukey Distribution, lambda = 0.0025, k = 40.0,384, b = -0.7043
+2. R^2 = 0.995205
+3. R^2 = 0.99343144, Tukey Distribution, lambda = 0.03797, k = 40.0,384, b = -0.7043
